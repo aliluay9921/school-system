@@ -15,6 +15,7 @@ class UserController extends Controller
     {
         $request = $request->json()->all();
         $validator = Validator::make($request, [
+            'school_id' => 'required|exists:schools,id',
             'user_name' => 'required|unique:users,user_name',
             'password' => 'required|min:6',
             'full_name' => 'required',
@@ -31,12 +32,15 @@ class UserController extends Controller
             'user_type.required' => 'يجب ادخال نوع المستخدم ',
             'class_id.exists' => 'يجب ادخال صف صحيح',
             'class_id.required' => 'يجب ادخال صف ',
+            'school_id.exists' => 'يجب ادخال مدرسة موجودة',
+            'school_id.required' => 'يجب ادخال المدرسة ',
         ]);
         if ($validator->fails()) {
             return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
         }
         $data = [];
         $data = [
+            'school_id' => $request['school_id'],
             'full_name' => $request['full_name'],
             'user_name' => $request['user_name'],
             'password' => bcrypt($request['password']),
@@ -65,6 +69,6 @@ class UserController extends Controller
             $data['class_id'] = $request['class_id'];
         }
         $user = User::create($data);
-        return $this->send_response(200, 'تم اضافة مستخدم بنجاح', [], $user);
+        return $this->send_response(200, 'تم اضافة مستخدم بنجاح', [], User::find($user->id));
     }
 }

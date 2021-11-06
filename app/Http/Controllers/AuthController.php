@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 
 class AuthController extends Controller
@@ -25,7 +26,7 @@ class AuthController extends Controller
         if (Auth::attempt(['user_name' => $request['user_name'], 'password' => $request['password']])) {
             $user = Auth::user();
             $token = $user->createToken($user->user_name)->accessToken;
-            return $this->send_response(200, 'تم تسجيل الدخول بنجاح', [], $user, $token);
+            return $this->send_response(200, 'تم تسجيل الدخول بنجاح', [], User::with('school', 'stage')->find($user->id), $token);
         } else {
             return $this->send_response(401, 'هناك مشكلة تحقق من تطابق المدخلات', null, null, null);
         }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,3 +23,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 route::post('login', [AuthController::class, 'login']);
 route::post('add_user', [UserController::class, 'addUser']);
+route::post('add_school', [SchoolController::class, 'add_school']);
