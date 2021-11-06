@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDailyMaterialsTable extends Migration
+class CreateSchoolsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateDailyMaterialsTable extends Migration
      */
     public function up()
     {
-        Schema::create('daily_materials', function (Blueprint $table) {
+        Schema::create('schools', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('class_id');
-            $table->string('materials');
-            $table->string('day');
-            $table->uuid('school_id');
+            $table->string('name');
+            $table->string('adress');
+            $table->double('student_number');
 
             $table->timestamps();
         });
@@ -31,6 +30,6 @@ class CreateDailyMaterialsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('daily_materials');
+        Schema::dropIfExists('schools');
     }
 }

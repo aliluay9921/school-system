@@ -21,6 +21,8 @@ class CreateCommentsTable extends Migration
             $table->text('bode');
             $table->date('from_time')->nullable();
             $table->date('to_time')->nullable();
+            $table->uuid('school_id');
+
             $table->timestamps();
         });
     }

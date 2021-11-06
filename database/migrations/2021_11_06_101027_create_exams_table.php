@@ -20,6 +20,8 @@ class CreateExamsTable extends Migration
             $table->uuid('class_id');
             $table->integer('lesson_number');
             $table->date('date');
+            $table->uuid('school_id');
+
             $table->timestamps();
         });
     }

@@ -17,6 +17,8 @@ class CreateStagesTable extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->double('fee');
+            $table->uuid('school_id');
+
             $table->timestamps();
         });
     }

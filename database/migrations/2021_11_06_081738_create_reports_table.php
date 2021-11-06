@@ -21,6 +21,8 @@ class CreateReportsTable extends Migration
             $table->uuid('user_id')->nullable();
             $table->uuid('class_id')->nullable();
             $table->uuid('material_id')->nullable();
+            $table->uuid('school_id');
+
 
             $table->timestamps();
         });

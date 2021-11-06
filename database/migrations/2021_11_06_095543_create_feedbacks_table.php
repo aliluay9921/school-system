@@ -17,6 +17,8 @@ class CreateFeedbacksTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('user_id');
             $table->string('text');
+            $table->uuid('school_id');
+
             $table->timestamps();
         });
     }

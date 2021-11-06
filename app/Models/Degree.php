@@ -27,4 +27,8 @@ class Degree extends Model
     {
         return $this->belongsTo(Semester::class, 'semester_id');
     }
+    public function school()
+    {
+        return $this->belongsTo(School::class, 'school_id');
+    }
 }

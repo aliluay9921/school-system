@@ -11,6 +11,10 @@ class Material extends Model
     use HasFactory, Uuids;
     protected $guarded = [];
 
+    public function school()
+    {
+        return $this->belongsTo(School::class, 'school_id');
+    }
     public function reports()
     {
         return $this->hasMany(Report::class, 'material_id');

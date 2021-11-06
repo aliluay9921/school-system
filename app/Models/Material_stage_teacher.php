@@ -22,4 +22,8 @@ class Material_stage_teacher extends Model
     {
         return $this->belongsTo(Material::class, 'material_id');
     }
+    public function school()
+    {
+        return $this->belongsTo(School::class, 'school_id');
+    }
 }

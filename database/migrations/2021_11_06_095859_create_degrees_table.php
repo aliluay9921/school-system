@@ -21,6 +21,8 @@ class CreateDegreesTable extends Migration
             $table->uuid('semester_id');
             $table->double('degree');
             $table->boolean('active')->default(true);
+            $table->uuid('school_id');
+
             $table->timestamps();
         });
     }

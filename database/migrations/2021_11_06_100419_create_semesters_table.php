@@ -18,6 +18,8 @@ class CreateSemestersTable extends Migration
             $table->string('name');
             $table->double('max_degree');
             $table->uuid('class_id');
+            $table->uuid('school_id');
+
             $table->timestamps();
         });
     }

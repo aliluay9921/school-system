@@ -17,6 +17,8 @@ class CreateImagesTable extends Migration
             $table->uuid('id');
             $table->string('image');
             $table->uuid('report_id');
+            $table->uuid('school_id');
+
             $table->timestamps();
         });
     }

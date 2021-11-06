@@ -16,6 +16,8 @@ class CreateMaterialsTable extends Migration
         Schema::create('materials', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
+            $table->uuid('school_id');
+
             $table->timestamps();
         });
     }

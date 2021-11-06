@@ -14,4 +14,8 @@ class Payment extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function school()
+    {
+        return $this->belongsTo(School::class, 'school_id');
+    }
 }

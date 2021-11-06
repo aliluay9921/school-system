@@ -40,4 +40,8 @@ class Stage extends Model
     {
         return $this->hasMany(DailyMaterial::class, 'class_id');
     }
+    public function school()
+    {
+        return $this->belongsTo(School::class, 'school_id');
+    }
 }

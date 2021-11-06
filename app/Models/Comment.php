@@ -23,4 +23,8 @@ class Comment extends Model
     {
         return $this->hasMany(Comment::class, 'parent_id', 'id');
     }
+    public function school()
+    {
+        return $this->belongsTo(School::class, 'school_id');
+    }
 }

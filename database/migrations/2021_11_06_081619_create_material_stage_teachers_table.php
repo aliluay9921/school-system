@@ -18,6 +18,8 @@ class CreateMaterialStageTeachersTable extends Migration
             $table->uuid('material_id');
             $table->uuid('stage_id');
             $table->uuid('teacher_id');
+            $table->uuid('school_id');
+
             $table->timestamps();
         });
     }

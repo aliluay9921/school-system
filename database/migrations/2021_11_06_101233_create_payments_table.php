@@ -18,6 +18,8 @@ class CreatePaymentsTable extends Migration
             $table->uuid('user_id');
             $table->date('pay_date');
             $table->boolean('active')->default(true);
+            $table->uuid('school_id');
+
             $table->timestamps();
         });
     }
