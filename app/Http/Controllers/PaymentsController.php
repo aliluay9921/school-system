@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
+use App\Models\User;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -25,12 +26,23 @@ class PaymentsController extends Controller
         if ($validator->fails()) {
             return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
         }
+
+
+
         $payment = Payment::create([
             'school_id' => auth()->user()->school->id,
             'pay_date' => $request['pay_date'],
             'value' => $request['value'],
             'user_id' => $request['user_id'],
         ]);
+
+        $user = User::find($request['user_id']);
+
+        if ($user->stage->fee == $user->payments->sum('value')) {
+            $user->update([
+                'paid' => false
+            ]);
+        }
         return $this->send_response(200, 'تم اضافة دفع  بنجاح', [], Payment::with('user')->find($payment->id));
     }
 }

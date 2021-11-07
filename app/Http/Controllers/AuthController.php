@@ -26,7 +26,7 @@ class AuthController extends Controller
         if (Auth::attempt(['user_name' => $request['user_name'], 'password' => $request['password']])) {
             $user = Auth::user();
             $token = $user->createToken($user->user_name)->accessToken;
-            return $this->send_response(200, 'تم تسجيل الدخول بنجاح', [], User::with('school', 'stage')->find($user->id), $token);
+            return $this->send_response(200, 'تم تسجيل الدخول بنجاح', [], User::with('school', 'stage', 'materials_stages_teachers')->find($user->id), $token);
         } else {
             return $this->send_response(401, 'هناك مشكلة تحقق من تطابق المدخلات', null, null, null);
         }
@@ -34,6 +34,6 @@ class AuthController extends Controller
 
     public function authInfo(Request $request)
     {
-        return $this->send_response(200, 'تم جلب معلومات المستخدم', [], User::with('school', 'stage')->find(auth()->user()->id));
+        return $this->send_response(200, 'تم جلب معلومات المستخدم', [], User::with('school', 'stage', 'materials_stages_teachers')->find(auth()->user()->id));
     }
 }

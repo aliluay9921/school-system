@@ -27,7 +27,7 @@ class CreateUsersTable extends Migration
             $table->uuid('class_id')->nullable();
             $table->string('parent_job')->nullable();
             $table->integer('user_type');
-            $table->boolean('payed')->default(true);
+            $table->boolean('paid')->default(true);
             $table->double('salary')->nullable();
             $table->rememberToken();
             $table->timestamps();

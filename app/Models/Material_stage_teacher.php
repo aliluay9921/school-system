@@ -10,6 +10,8 @@ class Material_stage_teacher extends Model
 {
     use HasFactory, Uuids;
     protected $guarded = [];
+
+    protected $with = ['stage', 'material'];
     public function user()
     {
         return $this->belongsTo(User::class, 'teacher_id');

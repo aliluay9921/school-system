@@ -32,18 +32,21 @@ route::post('login', [AuthController::class, 'login']);
 
 
 Route::middleware('auth:api')->group(function () {
+    route::get('get_users', [UserController::class, 'getUsers']);
+    route::get('auth_info', [AuthController::class, 'authInfo']);
+
+
+
     route::post('add_feedback', [FeedbackController::class, 'addFeedback']);
     route::post('add_comment', [CommentController::class, 'addComment']);
     route::post('add_report', [ReportController::class, 'addReport']);
-    route::get('auth_info', [AuthController::class, 'authInfo']);
 
     route::middleware('admin')->group(function () {
         route::post('add_school', [SchoolController::class, 'add_school']);
     });
     route::middleware('manager')->group(function () {
-        route::post('add_user', [UserController::class, 'addUser']);
 
-        route::get('get_users', [UserController::class, 'getUsers']);
+        route::post('add_user', [UserController::class, 'addUser']);
         route::post('add_stage', [StageController::class, 'addStage']);
         route::post('add_semester', [SemesterController::class, 'addSemester']);
         route::post('add_material', [MaterialController::class, 'addMaterial']);
