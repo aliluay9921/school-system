@@ -31,4 +31,9 @@ class AuthController extends Controller
             return $this->send_response(401, 'هناك مشكلة تحقق من تطابق المدخلات', null, null, null);
         }
     }
+
+    public function authInfo(Request $request)
+    {
+        return $this->send_response(200, 'تم جلب معلومات المستخدم', [], User::with('school', 'stage')->find(auth()->user()->id));
+    }
 }

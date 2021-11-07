@@ -18,9 +18,8 @@ class CreateCommentsTable extends Migration
             $table->uuid('report_id');
             $table->uuid('parent_id')->nullable();
             $table->uuid('user_id');
-            $table->text('bode');
-            $table->date('from_time')->nullable();
-            $table->date('to_time')->nullable();
+            $table->text('body');
+
             $table->uuid('school_id');
 
             $table->timestamps();

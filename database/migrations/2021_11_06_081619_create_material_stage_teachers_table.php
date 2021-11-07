@@ -16,7 +16,7 @@ class CreateMaterialStageTeachersTable extends Migration
         Schema::create('material_stage_teachers', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('material_id');
-            $table->uuid('stage_id');
+            $table->uuid('class_id');
             $table->uuid('teacher_id');
             $table->uuid('school_id');
 

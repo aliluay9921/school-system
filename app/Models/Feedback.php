@@ -10,6 +10,7 @@ class Feedback extends Model
 {
     use HasFactory, Uuids;
     protected $guarded = [];
+    protected $table = 'feedbacks';
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

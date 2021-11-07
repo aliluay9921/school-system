@@ -19,7 +19,7 @@ class User extends Authenticatable
      * @var string[]
      */
     protected $guarded = [];
-    protected $with = ['school'];
+    protected $with = ['school', 'stage'];
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -38,6 +38,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
 
 
 

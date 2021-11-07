@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Image extends Model
 {
     use HasFactory, Uuids;
+    protected $guarded = [];
     public function school()
     {
         return $this->belongsTo(School::class, 'school_id');

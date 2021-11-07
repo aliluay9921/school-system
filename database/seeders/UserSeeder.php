@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
             'user_name' => 'ali_luay',
             'password' => bcrypt('11111111'),
             'gender' => 0,
-            'user_type' => 1,
+            'user_type' => 0,
         ]);
         User::create([
             'school_id' => $school->id,

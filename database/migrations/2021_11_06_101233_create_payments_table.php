@@ -16,6 +16,7 @@ class CreatePaymentsTable extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id');
+            $table->double('value');
             $table->date('pay_date');
             $table->boolean('active')->default(true);
             $table->uuid('school_id');

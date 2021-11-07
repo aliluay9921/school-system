@@ -34,4 +34,9 @@ class Report extends Model
     {
         return $this->belongsTo(School::class, 'school_id');
     }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class, 'report_id');
+    }
 }
