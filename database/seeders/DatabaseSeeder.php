@@ -18,5 +18,12 @@ class DatabaseSeeder extends Seeder
         $this->call(SchoolSeeder::class);
         $this->call(StageSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(ExamSeeder::class);
+        $this->call(DailyMaterialSeeder::class);
+        $this->call(PaymentSeeder::class);
+        $this->call(MaterialSeeder::class);
+        $this->call(SemesterSeeder::class);
+        $this->call(FeedbackSeeder::class);
+        $this->call(SemesterSeeder::class);
     }
 }
