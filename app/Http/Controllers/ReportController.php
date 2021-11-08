@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\Report;
+use App\Traits\Pagination;
 use App\Traits\SendResponse;
 use App\Traits\UploadImage;
 use Illuminate\Http\Request;
@@ -11,7 +12,40 @@ use Illuminate\Support\Facades\Validator;
 
 class ReportController extends Controller
 {
-    use SendResponse, UploadImage;
+    use SendResponse, UploadImage, Pagination;
+
+    public function getReports()
+    {
+        if (auth()->user()->user_type == 1 || auth()->user()->user_type == 2) {
+            $reports = Report::with('material', 'stage', 'images')->where('school_id', auth()->user()->School->id)->where('issuer_id', auth()->user()->id);
+            //    الية عمل الفلتر ب اكثر من بارميتر 
+            if (isset($_GET)) {
+                foreach ($_GET as $key => $value) {
+                    if ($key == 'skip' || $key == 'limit') {
+                        continue;
+                    } else {
+                        $reports->where($key, $value);
+                    }
+                }
+            }
+        } elseif (auth()->user()->user_type == 3) {
+            $reports = Report::with('material', 'stage', 'images')->where('school_id', auth()->user()->School->id)->where('user_id', auth()->user()->id);
+            if (isset($_GET)) {
+                foreach ($_GET as $key => $value) {
+                    $reports->where($key, $value);
+                }
+            }
+        }
+
+        if (!isset($_GET['skip']))
+            $_GET['skip'] = 0;
+        if (!isset($_GET['limit']))
+            $_GET['limit'] = 10;
+        $res = $this->paging($reports,  $_GET['skip'],  $_GET['limit']);
+        return $this->send_response(200, 'تم جلب التبليغات بنجاح', [], $res["model"], null, $res["count"]);
+    }
+
+
     public function addReport(Request $request)
     {
         $request = $request->json()->all();

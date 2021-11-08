@@ -17,7 +17,7 @@ class CreateMaterialsTable extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->uuid('school_id');
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -24,7 +24,7 @@ class Stage extends Model
     {
         return $this->hasMany(Degree::class, 'class_id');
     }
-    public function semester()
+    public function semesters()
     {
         return $this->hasMany(Semester::class, 'class_id');
     }

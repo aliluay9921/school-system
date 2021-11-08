@@ -3,13 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Models\Exam;
+use App\Traits\Pagination;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class ExamController extends Controller
 {
-    use SendResponse;
+    use SendResponse, Pagination;
+
+    public function getExams()
+    {
+        if (isset($_GET['class_id'])) {
+            $exams = Exam::with('material', 'stage')->where('school_id', auth()->user()->School->id)->where('class_id', $_GET['class_id'])->orderBy('date', "ASC")->get();
+            return $this->send_response(200, 'تم جلب امتحانات الصف ', [], $exams);
+        }
+        $exams = Exam::with('material', 'stage')->where('school_id', auth()->user()->School->id)->orderBy('date', "ASC");
+        if (!isset($_GET['skip']))
+            $_GET['skip'] = 0;
+        if (!isset($_GET['limit']))
+            $_GET['limit'] = 10;
+        $res = $this->paging($exams,  $_GET['skip'],  $_GET['limit']);
+        return $this->send_response(200, 'تم جلب الامتحانات بنجاح', [], $res["model"], null, $res["count"]);
+    }
+
+
+
     public function addExam(Request $request)
     {
         $request = $request->json()->all();
@@ -42,5 +61,17 @@ class ExamController extends Controller
             'date' => $request['date']
         ]);
         return $this->send_response(200, 'تم اضافة امتحان  بنجاح', [], Exam::find($exam->id));
+    }
+    public function deleteExam(Request $request)
+    {
+        $request = $request->json()->all();
+        $validator = Validator::make($request, [
+            'exam_id' => 'required|exists:exams,id'
+        ]);
+        if ($validator->fails()) {
+            return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
+        }
+        Exam::find($request['exam_id'])->delete();
+        return $this->send_response(200, 'تم حذف الامتحان', [], []);
     }
 }

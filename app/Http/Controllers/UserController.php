@@ -21,7 +21,7 @@ class UserController extends Controller
             return $this->send_response(200, 'تم جلب معلومات المستخدم بنجاح', [], $user);
         }
 
-        $users = User::with('payments', 'degrees', 'stage')->where('school_id', auth()->user()->School->id)->where('user_type', $_GET['user_type']);
+        $users = User::with('stage')->where('school_id', auth()->user()->School->id)->where('user_type', $_GET['user_type']);
         if (isset($_GET['query'])) {
             $users->where(function ($q) {
                 $columns = Schema::getColumnListing('users');
@@ -114,5 +114,24 @@ class UserController extends Controller
         }
         $user = User::create($data);
         return $this->send_response(200, 'تم اضافة مستخدم بنجاح', [], User::find($user->id));
+    }
+
+
+    public function deleteUser(Request $request)
+    {
+        $request = $request->json()->all();
+        $validator = Validator::make($request, [
+            'user_id' => 'required|exists:users,id'
+        ], [
+            'user_id.required' => 'يجب ادخال  المستخدم المراد حذفه',
+            'user_id.exists' => 'المستخدم الذي قمت بأدخاله غير موجود',
+        ]);
+        if ($validator->fails()) {
+            return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
+        }
+
+        $user = User::find($request['user_id']);
+        $user->delete();
+        return $this->send_response(200, 'تم حذف المستخدم', [], []);
     }
 }

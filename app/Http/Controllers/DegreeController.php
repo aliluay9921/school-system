@@ -4,13 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Degree;
 use App\Models\Semester;
+use App\Traits\Pagination;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class DegreeController extends Controller
 {
-    use SendResponse;
+    use SendResponse, Pagination;
+
+    // public function getDegrees()
+    // {
+    //     if (isset($_GET['class_id'])) {
+    //         $degrees = Degree::with('material', 'stage', 'semester', 'user')->where('class_id', $_GET['class_id'])->get();
+    //         return $this->send_response(200, 'تم جلب درجات', [], $degrees);
+    //     }
+    // }
+
+
     public function addDegree(Request $request)
     {
         $request = $request->json()->all();

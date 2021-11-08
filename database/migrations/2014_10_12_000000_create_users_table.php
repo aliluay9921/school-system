@@ -29,6 +29,7 @@ class CreateUsersTable extends Migration
             $table->integer('user_type');
             $table->boolean('paid')->default(true);
             $table->double('salary')->nullable();
+            $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
         });

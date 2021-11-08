@@ -16,10 +16,10 @@ class CreateDailyMaterialsTable extends Migration
         Schema::create('daily_materials', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('class_id');
-            $table->string('materials');
+            $table->json('materials');
             $table->string('day');
             $table->uuid('school_id');
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }

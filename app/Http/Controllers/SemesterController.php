@@ -3,13 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\Semester;
+use App\Traits\Pagination;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+
+
+
 class SemesterController extends Controller
 {
-    use SendResponse;
+    use SendResponse, Pagination;
+    public function getSemesters()
+    {
+        $semester = Semester::where('school_id', auth()->user()->School->id);
+        if (!isset($_GET['skip']))
+            $_GET['skip'] = 0;
+        if (!isset($_GET['limit']))
+            $_GET['limit'] = 10;
+        $res = $this->paging($semester,  $_GET['skip'],  $_GET['limit']);
+        return $this->send_response(200, 'تم جلب المستخدمين بنجاح', [], $res["model"], null, $res["count"]);
+    }
     public function addSemester(Request $request)
     {
         $request = $request->json()->all();
@@ -34,5 +48,19 @@ class SemesterController extends Controller
             'school_id' => auth()->user()->school->id,
         ]);
         return $this->send_response(200, 'تم اضافة فصل جديد', [], Semester::find($semester->id));
+    }
+
+    public function deleteSemester(Request $request)
+    {
+        $request = $request->json()->all();
+        $validator = Validator::make($request, [
+            'semester_id' => 'required|exists:semesters,id'
+        ]);
+        if ($validator->fails()) {
+            return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
+        }
+
+        Semester::find($request['semester_id'])->delete();
+        return $this->send_response(200, 'تم حذف الفصل', [], []);
     }
 }

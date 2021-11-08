@@ -20,7 +20,7 @@ class CreatePaymentsTable extends Migration
             $table->date('pay_date');
             $table->boolean('active')->default(true);
             $table->uuid('school_id');
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }

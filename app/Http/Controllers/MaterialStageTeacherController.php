@@ -2,14 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Material_stage_teacher;
+use App\Traits\Pagination;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
+use App\Models\Material_stage_teacher;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 
 class MaterialStageTeacherController extends Controller
 {
-    use SendResponse;
+    use SendResponse, Pagination;
+
+    public function getMaterialStageTeacher()
+    {
+        $get = Material_stage_teacher::with('user')->where('school_id', auth()->user()->School->id);
+        if (isset($_GET)) {
+            foreach ($_GET as $key => $value) {
+                if ($key == 'skip' || $key == 'limit') {
+                    continue;
+                } else {
+                    $get->where($key, $value);
+                }
+            }
+        }
+        if (!isset($_GET['skip']))
+            $_GET['skip'] = 0;
+        if (!isset($_GET['limit']))
+            $_GET['limit'] = 10;
+        $res = $this->paging($get,  $_GET['skip'],  $_GET['limit']);
+        return $this->send_response(200, 'تم جلب معلومات بنجاح', [], $res["model"], null, $res["count"]);
+    }
+
     public function addMaterialStageTeacher(Request $request)
     {
         $request = $request->json()->all();

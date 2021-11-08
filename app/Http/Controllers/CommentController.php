@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Report;
+use App\Traits\Pagination;
 use App\Traits\SendResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -11,7 +12,22 @@ use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
 {
-    use SendResponse;
+    use SendResponse, Pagination;
+
+    public function getCommtns()
+    {
+        $comments = Comment::with('children', 'user')->where('school_id', auth()->user()->School->id);
+        if (isset($_GET['report_id'])) {
+            $comments->where('report_id', $_GET['report_id']);
+        }
+        if (!isset($_GET['skip']))
+            $_GET['skip'] = 0;
+        if (!isset($_GET['limit']))
+            $_GET['limit'] = 10;
+        $res = $this->paging($comments,  $_GET['skip'],  $_GET['limit']);
+        return $this->send_response(200, 'تم جلب التعليقات بنجاح', [], $res["model"], null, $res["count"]);
+    }
+
     public function addComment(Request $request)
     {
         $request = $request->json()->all();
@@ -46,5 +62,23 @@ class CommentController extends Controller
         }
         $comment = Comment::Create($data);
         return $this->send_response(200, 'تم اضافة تعليق', [], Comment::with('user')->find($comment));
+    }
+
+
+    public function deleteComment(Request $request)
+    {
+        $request = $request->json()->all();
+        $validator = Validator::make($request, [
+            'comment_id' => 'required|exists:comments,id'
+        ], [
+            'comment_id.required' => 'يجب اختيار تعليق',
+            'comment_id.exists' => 'يجب ادخال تعليق موجود',
+        ]);
+        if ($validator->fails()) {
+            return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
+        }
+
+        Comment::find($request['comment_id'])->delete();
+        return $this->send_response(200, 'تم حذف تعليق بنجاح', [], []);
     }
 }

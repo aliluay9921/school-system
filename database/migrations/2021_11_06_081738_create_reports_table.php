@@ -24,8 +24,7 @@ class CreateReportsTable extends Migration
             $table->uuid('school_id');
             $table->timestamp('from_time')->nullable();
             $table->timestamp('to_time')->nullable();
-
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }

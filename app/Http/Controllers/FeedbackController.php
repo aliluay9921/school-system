@@ -3,13 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\Feedback;
+use App\Traits\Pagination;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class FeedbackController extends Controller
 {
-    use SendResponse;
+    use SendResponse, Pagination;
+
+    public function getFeedbacks()
+    {
+        $feedbacks = Feedback::with('user')->where('school_id', auth()->user()->School->id);
+        if (!isset($_GET['skip']))
+            $_GET['skip'] = 0;
+        if (!isset($_GET['limit']))
+            $_GET['limit'] = 10;
+        $res = $this->paging($feedbacks,  $_GET['skip'],  $_GET['limit']);
+        return $this->send_response(200, 'تم جلب ردود بنجاح', [], $res["model"], null, $res["count"]);
+    }
+
+
     public function addFeedback(Request $request)
     {
         $request = $request->json()->all();

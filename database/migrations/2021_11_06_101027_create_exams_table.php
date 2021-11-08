@@ -21,7 +21,7 @@ class CreateExamsTable extends Migration
             $table->integer('lesson_number');
             $table->date('date');
             $table->uuid('school_id');
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }

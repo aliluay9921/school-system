@@ -19,9 +19,8 @@ class CreateCommentsTable extends Migration
             $table->uuid('parent_id')->nullable();
             $table->uuid('user_id');
             $table->text('body');
-
             $table->uuid('school_id');
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }

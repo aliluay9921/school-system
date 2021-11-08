@@ -18,7 +18,7 @@ class TeacherMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->user()->user_type == 2 || auth()->user()->user_type == 0) {
+        if (auth()->user()->user_type == 2 || auth()->user()->user_type == 0 || auth()->user()->user_type == 1) {
             return $next($request);
         } else {
             return $this->send_response(401, 'غير مصرح لك بالدخول', [], []);
