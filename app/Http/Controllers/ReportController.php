@@ -72,7 +72,7 @@ class ReportController extends Controller
     public function getReports()
     {
         if (auth()->user()->user_type == 1 || auth()->user()->user_type == 2) {
-            $reports = Report::with('material', 'stage', 'images')->where('school_id', auth()->user()->School->id)->where('issuer_id', auth()->user()->id);
+            $reports = Report::with('user', 'issuer', 'images', 'stage', 'material')->where('school_id', auth()->user()->School->id)->where('issuer_id', auth()->user()->id);
             //    الية عمل الفلتر ب اكثر من بارميتر 
             if (isset($_GET)) {
                 foreach ($_GET as $key => $value) {
@@ -84,7 +84,7 @@ class ReportController extends Controller
                 }
             }
         } elseif (auth()->user()->user_type == 3) {
-            $reports = Report::with('material', 'stage', 'images')->where('school_id', auth()->user()->School->id)->where('user_id', auth()->user()->id);
+            $reports = Report::with('user', 'issuer', 'images', 'stage', 'material')->where('school_id', auth()->user()->School->id)->where('user_id', auth()->user()->id);
             if (isset($_GET)) {
                 foreach ($_GET as $key => $value) {
                     $reports->where($key, $value);
