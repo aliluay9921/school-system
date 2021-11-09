@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFeedbacksTable extends Migration
+class CreateNotificationUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateFeedbacksTable extends Migration
      */
     public function up()
     {
-        Schema::create('feedbacks', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+        Schema::create('notification_users', function (Blueprint $table) {
+            $table->id();
             $table->uuid('user_id');
-            $table->string('text');
-            $table->uuid('school_id');
-            $table->softDeletes();
+            $table->uuid('notification_id');
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreateFeedbacksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('feedbacks');
+        Schema::dropIfExists('notification_users');
     }
 }

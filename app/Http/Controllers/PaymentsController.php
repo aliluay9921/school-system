@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\Payment;
 use App\Models\User;
 use App\Traits\Pagination;
@@ -43,9 +44,6 @@ class PaymentsController extends Controller
         if ($validator->fails()) {
             return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
         }
-
-
-
         $payment = Payment::create([
             'school_id' => auth()->user()->school->id,
             'pay_date' => $request['pay_date'],
@@ -54,12 +52,27 @@ class PaymentsController extends Controller
         ]);
 
         $user = User::find($request['user_id']);
-
-        if ($user->stage->fee == $user->payments->sum('value')) {
-            $user->update([
-                'paid' => false
+        if ($user->user_type == 3) {
+            if ($user->stage->fee == $user->payments->sum('value')) {
+                $user->update([
+                    'paid' => false
+                ]);
+            }
+            $notification = Notification::create([
+                'title' => 'تبليغ القسط',
+                'body'  => 'تم استلام مبلغ القسط من قبل ادارة المدرسة وقيمته' . $request['value'],
+                'from'  => auth()->user()->id,
+                'type'  => 0
+            ]);
+        } else {
+            $notification = Notification::create([
+                'title' => 'تبليغ استلام راتب',
+                'body'  => 'تم تسليم الراتب الخاص بالتدريسي ' . $user->full_name . ' وقيمته' . $request['value'],
+                'from'  => auth()->user()->id,
+                'type'  => 0
             ]);
         }
+        $notification->users()->attach($user);
         return $this->send_response(200, 'تم اضافة دفع  بنجاح', [], Payment::with('user')->find($payment->id));
     }
 }

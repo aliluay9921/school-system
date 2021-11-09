@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Image;
+use App\Models\Notification;
 use App\Models\Report;
+use App\Models\User;
 use App\Traits\Pagination;
 use App\Traits\SendResponse;
 use App\Traits\UploadImage;
@@ -13,6 +15,59 @@ use Illuminate\Support\Facades\Validator;
 class ReportController extends Controller
 {
     use SendResponse, UploadImage, Pagination;
+
+    public function send_notification($report)
+    {
+        if ($report->type == 0) {
+            $user = User::find($report->user_id);
+            $notification =  Notification::create([
+                'title' => 'تبليغ الغياب',
+                'body'  => $report->body,
+                'from'  => auth()->user()->id,
+                'type'  => $report->type
+            ]);
+            $notification->users()->attach($user);
+        } elseif ($report->type == 1) {
+            $notification =  Notification::create([
+                'title' => 'تبليغ عام ',
+                'body'  => $report->body,
+                'from'  => auth()->user()->id,
+                'type'  => $report->type
+            ]);
+            $users = User::where('school_id', $report->school_id)->whereIn('user_type', [2, 3])->get();
+            foreach ($users as $user) {
+                $notification->users()->attach($user);
+            }
+        } elseif ($report->type == 2) {
+            $notification =  Notification::create([
+                'title' => 'تبليغ خاص',
+                'body'  => $report->body,
+                'from'  => auth()->user()->id,
+                'type'  => $report->type
+            ]);
+            $users = User::where('school_id', $report->school_id)->where('class_id', $report->class_id)->get();
+            $notification->users()->attach($users);
+        } elseif ($report->type == 3) {
+            $notification =  Notification::create([
+                'title' => 'تبليغ امتحان',
+                'body'  => $report->body,
+                'from'  => auth()->user()->id,
+                'type'  => $report->type
+            ]);
+            $users = User::where('school_id', $report->school_id)->where('class_id', $report->class_id)->get();
+            $notification->users()->attach($users);
+        } else {
+            $notification =  Notification::create([
+                'title' => 'تبليغ واجب',
+                'body'  => $report->body,
+                'from'  => auth()->user()->id,
+                'type'  => $report->type
+            ]);
+            $users = User::where('school_id', $report->school_id)->where('class_id', $report->class_id)->get();
+            $notification->users()->attach($users);
+        }
+    }
+
 
     public function getReports()
     {
@@ -106,6 +161,7 @@ class ReportController extends Controller
                 ]);
             }
         }
+        $this->send_notification($report);
 
         return $this->send_response(200, 'تم اضافة تبليغ بنجاح', [], Report::with('user', 'issuer', 'images', 'stage', 'material')->find($report->id));
     }

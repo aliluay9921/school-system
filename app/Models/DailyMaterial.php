@@ -20,6 +20,11 @@ class DailyMaterial extends Model
     {
         return $this->belongsTo(Stage::class, 'class_id');
     }
+
+    public function material()
+    {
+        return $this->belongsTo(Material::class, 'materials');
+    }
     public function school()
     {
         return $this->belongsTo(School::class, 'school_id');

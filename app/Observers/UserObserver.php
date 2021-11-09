@@ -36,6 +36,10 @@ class UserObserver
      */
     public function deleted(User $user)
     {
+        $user->reports()->delete();
+        $user->degrees()->delete();
+        $user->feedbacks()->delete();
+        $user->comments()->delete();
     }
 
     /**
