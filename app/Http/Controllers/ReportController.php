@@ -87,7 +87,11 @@ class ReportController extends Controller
             $reports = Report::with('user', 'issuer', 'images', 'stage', 'material')->where('school_id', auth()->user()->School->id)->where('user_id', auth()->user()->id);
             if (isset($_GET)) {
                 foreach ($_GET as $key => $value) {
-                    $reports->where($key, $value);
+                    if ($key == 'skip' || $key == 'limit') {
+                        continue;
+                    } else {
+                        $reports->where($key, $value);
+                    }
                 }
             }
         }
