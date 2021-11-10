@@ -14,10 +14,21 @@ class DailyMaterialController extends Controller
 
     public function getDailyMaterials()
     {
-        $daily_materials = DailyMaterial::with('stage')->where('school_id', auth()->user()->School->id);
-        if (isset($_GET['class_id'])) {
-            $daily_materials->where('class_id', $_GET['class_id']);
+        if (auth()->user()->user_type == 3) {
+            $daily_materials = DailyMaterial::with('stage')->where('school_id', auth()->user()->School->id)->where('class_id', auth()->user()->class_id);
+        } else {
+            $daily_materials = DailyMaterial::with('stage')->where('school_id', auth()->user()->School->id);
         }
+        if (isset($_GET)) {
+            foreach ($_GET as $key => $value) {
+                if ($key == 'skip' || $key == 'limit') {
+                    continue;
+                } else {
+                    $daily_materials->where($key, $value);
+                }
+            }
+        }
+
         if (!isset($_GET['skip']))
             $_GET['skip'] = 0;
         if (!isset($_GET['limit']))
