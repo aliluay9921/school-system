@@ -17,11 +17,20 @@ class ExamController extends Controller
 
     public function getExams()
     {
-        if (isset($_GET['class_id'])) {
-            $exams = Exam::with('material', 'stage')->where('school_id', auth()->user()->School->id)->where('class_id', $_GET['class_id'])->orderBy('date', "ASC")->get();
-            return $this->send_response(200, 'تم جلب امتحانات الصف ', [], $exams);
+        if (auth()->user()->user_type == 3) {
+            $exams = Exam::with('material', 'stage')->where('school_id', auth()->user()->School->id)->where('class_id', auth()->user()->class_id)->orderBy('date', "ASC")->get();
+        } else {
+            $exams = Exam::with('material', 'stage')->where('school_id', auth()->user()->School->id)->orderBy('date', "ASC");
         }
-        $exams = Exam::with('material', 'stage')->where('school_id', auth()->user()->School->id)->orderBy('date', "ASC");
+        if (isset($_GET)) {
+            foreach ($_GET as $key => $value) {
+                if ($key == 'skip' || $key == 'limit') {
+                    continue;
+                } else {
+                    $exams->where($key, $value);
+                }
+            }
+        }
         if (!isset($_GET['skip']))
             $_GET['skip'] = 0;
         if (!isset($_GET['limit']))
