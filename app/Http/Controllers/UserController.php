@@ -59,7 +59,6 @@ class UserController extends Controller
     {
         $request = $request->json()->all();
         $validator = Validator::make($request, [
-            'school_id' => 'required|exists:schools,id',
             'user_name' => 'required|unique:users,user_name',
             'password' => 'required|min:6',
             'full_name' => 'required',
@@ -84,7 +83,7 @@ class UserController extends Controller
         }
         $data = [];
         $data = [
-            'school_id' => $request['school_id'],
+            'school_id' => auth()->user()->School_id,
             'full_name' => $request['full_name'],
             'user_name' => $request['user_name'],
             'password' => bcrypt($request['password']),
