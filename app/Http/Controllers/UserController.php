@@ -83,7 +83,7 @@ class UserController extends Controller
         }
         $data = [];
         $data = [
-            'school_id' => auth()->user()->School_id,
+            'school_id' => auth()->user()->School->id,
             'full_name' => $request['full_name'],
             'user_name' => $request['user_name'],
             'password' => bcrypt($request['password']),
