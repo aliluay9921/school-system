@@ -13,13 +13,29 @@ class DegreeController extends Controller
 {
     use SendResponse, Pagination;
 
-    // public function getDegrees()
-    // {
-    //     if (isset($_GET['class_id'])) {
-    //         $degrees = Degree::with('material', 'stage', 'semester', 'user')->where('class_id', $_GET['class_id'])->get();
-    //         return $this->send_response(200, 'تم جلب درجات', [], $degrees);
-    //     }
-    // }
+    public function getDegrees()
+    {
+        if (auth()->user()->user_type == 3) {
+            $degrees = Degree::with('material', 'stage', 'semester', 'user')->where('school_id', auth()->user()->school->id)->where('user_id', auth()->user()->id);
+        } else {
+            $degrees = Degree::with('material', 'stage', 'semester', 'user')->where('school_id', auth()->user()->school->id);
+        }
+        if (isset($_GET)) {
+            foreach ($_GET as $key => $value) {
+                if ($key == 'skip' || $key == 'limit') {
+                    continue;
+                } else {
+                    $degrees->where($key, $value);
+                }
+            }
+        }
+        if (!isset($_GET['skip']))
+            $_GET['skip'] = 0;
+        if (!isset($_GET['limit']))
+            $_GET['limit'] = 10;
+        $res = $this->paging($degrees,  $_GET['skip'],  $_GET['limit']);
+        return $this->send_response(200, 'تم جلب الدرجات بنجاح', [], $res["model"], null, $res["count"]);
+    }
 
 
     public function addDegree(Request $request)

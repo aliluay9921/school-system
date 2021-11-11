@@ -41,7 +41,7 @@ Route::middleware('auth:api')->group(function () {
     route::get('get_materials', [MaterialController::class, 'getMaterials']);
     route::get('get_stages', [StageController::class, 'getStages']);
     route::get('get_semesters', [SemesterController::class, 'getSemesters']);
-    // route::get('get_degrees', [DegreeController::class, 'getDegrees']);
+    route::get('get_degrees', [DegreeController::class, 'getDegrees']);
     route::get('get_feedbacks', [FeedbackController::class, 'getFeedbacks']);
     route::get('get_exams', [ExamController::class, 'getExams']);
     route::get('get_payments', [PaymentsController::class, 'getPayments']);
