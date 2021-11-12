@@ -42,4 +42,17 @@ class MaterialController extends Controller
         ]);
         return $this->send_response(200, 'تم اضافة مادة جديدة', [], Material::find($material->id));
     }
+    public function deleteMaterial(Request $request)
+    {
+        $request = $request->json()->all();
+        $validator = Validator::make($request, [
+            'material_id' => 'required|exists:materials,id'
+        ]);
+        if ($validator->fails()) {
+            return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
+        }
+
+        Material::find($request['material_id'])->delete();
+        return $this->send_response(200, 'تم حذف المادة', [], []);
+    }
 }

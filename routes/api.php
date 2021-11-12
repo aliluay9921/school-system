@@ -15,6 +15,7 @@ use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\StageController;
 use App\Http\Controllers\UserController;
 use App\Models\DailyMaterial;
+use App\Models\Material;
 use App\Models\Material_stage_teacher;
 use App\Models\Stage;
 use Illuminate\Http\Request;
@@ -77,6 +78,7 @@ Route::middleware('auth:api')->group(function () {
         route::delete('delete_daily_material', [DailyMaterialController::class, 'deleteDailyMaterial']);
         route::delete('delete_exam', [ExamController::class, 'deleteExam']);
         route::delete('delete_semester', [SemesterController::class, 'deleteSemester']);
+        route::delete('delete_material', [MaterialController::class, 'deleteMaterial']);
     });
     route::middleware('teacher')->group(function () {
         route::post('add_exam', [ExamController::class, 'addExam']);
