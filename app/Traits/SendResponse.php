@@ -27,6 +27,6 @@ trait SendResponse
             'count' => $count
 
         ];
-        return response()->json($response);
+        return response()->json($response, $code);
     }
 }
