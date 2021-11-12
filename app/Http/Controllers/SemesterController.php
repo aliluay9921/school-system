@@ -16,7 +16,7 @@ class SemesterController extends Controller
     use SendResponse, Pagination;
     public function getSemesters()
     {
-        $semester = Semester::with("degrees")->where('school_id', auth()->user()->School->id);
+        $semester = Semester::with("stage")->where('school_id', auth()->user()->School->id);
 
         if (!isset($_GET['skip']))
             $_GET['skip'] = 0;
