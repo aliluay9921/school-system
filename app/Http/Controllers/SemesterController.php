@@ -48,7 +48,7 @@ class SemesterController extends Controller
             'class_id' => $request['class_id'],
             'school_id' => auth()->user()->school->id,
         ]);
-        return $this->send_response(200, 'تم اضافة فصل جديد', [], Semester::find($semester->id));
+        return $this->send_response(200, 'تم اضافة فصل جديد', [], Semester::with("stage")->find($semester->id));
     }
 
     public function deleteSemester(Request $request)
