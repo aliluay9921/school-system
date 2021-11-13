@@ -73,7 +73,6 @@ Route::middleware('auth:api')->group(function () {
         route::post('add_material_stage_teacher', [MaterialStageTeacherController::class, 'addMaterialStageTeacher']);
         route::post('add_degree', [DegreeController::class, 'addDegree']);
 
-        route::put('edit_report', [ReportController::class, "editReport"]);
 
         route::delete('delete_user', [UserController::class, 'deleteUser']);
         route::delete('delete_daily_material', [DailyMaterialController::class, 'deleteDailyMaterial']);
@@ -83,5 +82,6 @@ Route::middleware('auth:api')->group(function () {
     });
     route::middleware('teacher')->group(function () {
         route::post('add_exam', [ExamController::class, 'addExam']);
+        route::put('edit_report', [ReportController::class, "editReport"]);
     });
 });
