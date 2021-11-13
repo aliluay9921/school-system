@@ -173,4 +173,34 @@ class ReportController extends Controller
 
         return $this->send_response(200, 'تم اضافة تبليغ بنجاح', [], Report::with('user', 'issuer', 'images', 'stage', 'material')->find($report->id));
     }
+
+    public function editReport(Request $request)
+    {
+        $request = $request->json()->all();
+
+        $validator = Validator::make($request, [
+            "report_id" => 'required|exists:reports,id',
+            "type"  => 'required',
+        ]);
+        if ($validator->fails()) {
+            return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
+        }
+        $report = Report::find($request['report_id']);
+        if ($request['type'] == 0) {
+            $report->update([
+                "body" => $report['body'],
+            ]);
+        } elseif ($request['type'] == 1) {
+            foreach ($request['images'] as $image) {
+                Image::create([
+                    'image' => $this->uploadPicture($image, '/images/'),
+                    'report_id' => $report->id,
+                    'school_id' => auth()->user()->School->id
+                ]);
+            }
+        } else {
+            Image::find($request['image_id'])->delete();
+        }
+        return $this->send_response(200, 'تم التعديل على التبليغ', [], Report::with('user', 'issuer', 'images', 'stage', 'material')->find($request['report_id']));
+    }
 }
