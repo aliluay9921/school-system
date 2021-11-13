@@ -17,7 +17,7 @@ class CreateReportsTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('issuer_id');
             $table->integer('type');
-            $table->text('body');
+            $table->text('body')->nullable();
             $table->uuid('user_id')->nullable();
             $table->uuid('class_id')->nullable();
             $table->uuid('material_id')->nullable();

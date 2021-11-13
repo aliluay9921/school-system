@@ -190,17 +190,21 @@ class ReportController extends Controller
             $report->update([
                 "body" => $request['body'],
             ]);
+            return $this->send_response(200, 'تم التعديل على التبليغ', [], []);
         } elseif ($request['type'] == 1) {
+            $images = [];
             foreach ($request['images'] as $image) {
-                Image::create([
+                $new_image =  Image::create([
                     'image' => $this->uploadPicture($image, '/images/'),
                     'report_id' => $request->id,
                     'school_id' => auth()->user()->School->id
                 ]);
+                $images[] = $new_image;
             }
+            return $this->send_response(200, 'تم التعديل على التبليغ', [], $images);
         } else {
             Image::find($request['image_id'])->delete();
+            return $this->send_response(200, 'تم التعديل على التبليغ', [], []);
         }
-        return $this->send_response(200, 'تم التعديل على التبليغ', [], Report::with('user', 'issuer', 'images', 'stage', 'material')->find($request['report_id']));
     }
 }
