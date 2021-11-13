@@ -188,13 +188,13 @@ class ReportController extends Controller
         $report = Report::find($request['report_id']);
         if ($request['type'] == 0) {
             $report->update([
-                "body" => $report['body'],
+                "body" => $request['body'],
             ]);
         } elseif ($request['type'] == 1) {
             foreach ($request['images'] as $image) {
                 Image::create([
                     'image' => $this->uploadPicture($image, '/images/'),
-                    'report_id' => $report->id,
+                    'report_id' => $request->id,
                     'school_id' => auth()->user()->School->id
                 ]);
             }
