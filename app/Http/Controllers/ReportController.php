@@ -196,7 +196,7 @@ class ReportController extends Controller
             foreach ($request['images'] as $image) {
                 $new_image =  Image::create([
                     'image' => $this->uploadPicture($image, '/images/'),
-                    'report_id' => $request->id,
+                    'report_id' => $report->id,
                     'school_id' => auth()->user()->School->id
                 ]);
                 $images[] = $new_image;
