@@ -16,7 +16,7 @@ class CommentController extends Controller
 
     public function getCommtns()
     {
-        $comments = Comment::with('parent', 'user')->where('school_id', auth()->user()->School->id);
+        $comments = Comment::with('user', 'parent', "parent.user")->where('school_id', auth()->user()->School->id);
         if (isset($_GET['report_id'])) {
             $comments->where('report_id', $_GET['report_id']);
         }
