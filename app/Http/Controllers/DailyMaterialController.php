@@ -44,13 +44,12 @@ class DailyMaterialController extends Controller
         $validator = Validator::make($request, [
             'class_id' => 'required|exists:stages,id',
             'materials' => 'required',
-            'day'     => 'required|date'
+            'day'     => 'required'
         ], [
             'class_id.required' => 'يجب ادخال الصف',
             'class_id.exists' => 'يجب ادخال صف صحيح',
             'materials.required' => 'يجب ادخال مواد',
             'day.required' => 'يجب ادخال اليوم',
-            'day.date' => 'غلط في ادخال التأريخ'
         ]);
         if ($validator->fails()) {
             return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);

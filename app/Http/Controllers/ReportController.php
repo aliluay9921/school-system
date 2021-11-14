@@ -193,6 +193,9 @@ class ReportController extends Controller
             return $this->send_response(200, 'تم التعديل على التبليغ', [], []);
         } elseif ($request['type'] == 1) {
             $images = [];
+            if ($report->images->count() == 4) {
+                return $this->send_response(401, 'لايمكنك اضافة اكثر من 4 صور', [], []);
+            }
             foreach ($request['images'] as $image) {
                 $new_image =  Image::create([
                     'image' => $this->uploadPicture($image, '/images/'),
