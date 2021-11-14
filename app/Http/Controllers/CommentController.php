@@ -16,7 +16,7 @@ class CommentController extends Controller
 
     public function getCommtns()
     {
-        $comments = Comment::with('children', 'user')->where('school_id', auth()->user()->School->id);
+        $comments = Comment::with('parent', 'user')->where('school_id', auth()->user()->School->id);
         if (isset($_GET['report_id'])) {
             $comments->where('report_id', $_GET['report_id']);
         }
@@ -61,7 +61,7 @@ class CommentController extends Controller
             $data['parent_id'] = $request['parent_id'];
         }
         $comment = Comment::Create($data);
-        return $this->send_response(200, 'تم اضافة تعليق', [], Comment::with('user', 'children')->find($comment));
+        return $this->send_response(200, 'تم اضافة تعليق', [], Comment::with('user', 'parent')->find($comment));
     }
 
 
