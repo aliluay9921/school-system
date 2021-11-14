@@ -104,7 +104,7 @@ class ReportController extends Controller
             $_GET['skip'] = 0;
         if (!isset($_GET['limit']))
             $_GET['limit'] = 10;
-        $res = $this->paging($reports,  $_GET['skip'],  $_GET['limit']);
+        $res = $this->paging($reports->orderBy("created_at", "ASC"),  $_GET['skip'],  $_GET['limit']);
         return $this->send_response(200, 'تم جلب التبليغات بنجاح', [], $res["model"], null, $res["count"]);
     }
 

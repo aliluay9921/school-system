@@ -24,7 +24,7 @@ class CommentController extends Controller
             $_GET['skip'] = 0;
         if (!isset($_GET['limit']))
             $_GET['limit'] = 10;
-        $res = $this->paging($comments,  $_GET['skip'],  $_GET['limit']);
+        $res = $this->paging($comments->orderBy("created_at", "ASC"),  $_GET['skip'],  $_GET['limit']);
         return $this->send_response(200, 'تم جلب التعليقات بنجاح', [], $res["model"], null, $res["count"]);
     }
 
@@ -61,7 +61,7 @@ class CommentController extends Controller
             $data['parent_id'] = $request['parent_id'];
         }
         $comment = Comment::Create($data);
-        return $this->send_response(200, 'تم اضافة تعليق', [], Comment::with('user')->find($comment));
+        return $this->send_response(200, 'تم اضافة تعليق', [], Comment::with('user', 'children')->find($comment));
     }
 
 
