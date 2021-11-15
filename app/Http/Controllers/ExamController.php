@@ -72,7 +72,7 @@ class ExamController extends Controller
             'day' => $request['day'],
             'date' => $request['date']
         ]);
-        return $this->send_response(200, 'تم اضافة امتحان  بنجاح', [], Exam::find($exam->id));
+        return $this->send_response(200, 'تم اضافة امتحان  بنجاح', [], Exam::with('material')->find($exam->id));
     }
     public function deleteExam(Request $request)
     {
