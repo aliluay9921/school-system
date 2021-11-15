@@ -14,7 +14,7 @@ class AddSchoolIdToNotificationsTable extends Migration
     public function up()
     {
         Schema::table('notifications', function (Blueprint $table) {
-            $table->uuid('school_id');
+            $table->uuid('school_id')->nullable();
         });
     }
 
