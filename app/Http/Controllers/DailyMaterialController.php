@@ -65,6 +65,32 @@ class DailyMaterialController extends Controller
         return $this->send_response(200, 'تم اضافة جدول يومي', [], DailyMaterial::find($daily_materials->id));
     }
 
+    public function editDailyMaterial(Request $request)
+    {
+        $request = $request->json()->all();
+        $daily_material = DailyMaterial::find($request['daily_material_id']);
+        $validator = Validator::make($request, [
+            'daily_material_id' => 'required|exists:daily_materials,id',
+            'class_id' => 'required|exists:stages,id',
+            'materials' => 'required',
+            'day'     => 'required'
+        ], [
+            'class_id.required' => 'يجب ادخال الصف',
+            'class_id.exists' => 'يجب ادخال صف صحيح',
+            'materials.required' => 'يجب ادخال مواد',
+            'day.required' => 'يجب ادخال اليوم',
+        ]);
+        if ($validator->fails()) {
+            return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
+        }
+        $daily_material->update([
+            'class_id' => $request['class_id'],
+            'materials' => $request['materials'],
+            'day' => $request['day'],
+        ]);
+        return $this->send_response(200, "تم التعديل على الجدول", [], DailyMaterial::find($request['materials']));
+    }
+
     public function deleteDailyMaterial(Request $request)
     {
         $request = $request->json()->all();
