@@ -88,7 +88,7 @@ class DailyMaterialController extends Controller
             'materials' => $request['materials'],
             'day' => $request['day'],
         ]);
-        return $this->send_response(200, "تم التعديل على الجدول", [], DailyMaterial::find($request['materials']));
+        return $this->send_response(200, "تم التعديل على الجدول", [], DailyMaterial::find($request['daily_material_id']));
     }
 
     public function deleteDailyMaterial(Request $request)
