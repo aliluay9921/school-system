@@ -8,6 +8,7 @@ use App\Http\Controllers\ExamController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\MaterialStageTeacherController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SchoolController;
@@ -17,7 +18,9 @@ use App\Http\Controllers\UserController;
 use App\Models\DailyMaterial;
 use App\Models\Material;
 use App\Models\Material_stage_teacher;
+use App\Models\Notification;
 use App\Models\Stage;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -50,7 +53,7 @@ Route::middleware('auth:api')->group(function () {
     route::get('get_schools', [SchoolController::class, 'getSchool']);
     route::get('get_daily_materials', [DailyMaterialController::class, 'getDailyMaterials']);
     route::get('get_comments', [CommentController::class, 'getCommtns']);
-
+    route::get("get_notification", [NotificationController::class, "getNotification"]);
     route::post('add_feedback', [FeedbackController::class, 'addFeedback']);
     route::post('add_comment', [CommentController::class, 'addComment']);
     route::post('add_report', [ReportController::class, 'addReport']);

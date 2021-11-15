@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSoftDeleteToMaterialsTable extends Migration
+class AddSchoolIdToNotificationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddSoftDeleteToMaterialsTable extends Migration
      */
     public function up()
     {
-        Schema::table('materials', function (Blueprint $table) {
-            $table->softDeletes();
+        Schema::table('notifications', function (Blueprint $table) {
+            $table->uuid('school_id');
         });
     }
 
@@ -25,7 +25,7 @@ class AddSoftDeleteToMaterialsTable extends Migration
      */
     public function down()
     {
-        Schema::table('materials', function (Blueprint $table) {
+        Schema::table('notifications', function (Blueprint $table) {
         });
     }
 }
