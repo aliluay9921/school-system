@@ -61,7 +61,7 @@ class CommentController extends Controller
             $data['parent_id'] = $request['parent_id'];
         }
         $comment = Comment::Create($data);
-        return $this->send_response(200, 'تم اضافة تعليق', [], Comment::with('user', 'parent', "parent.user")->find($comment));
+        return $this->send_response(200, 'تم اضافة تعليق', [], Comment::with('user', 'parent', "parent.user")->find($comment->id));
     }
 
 
