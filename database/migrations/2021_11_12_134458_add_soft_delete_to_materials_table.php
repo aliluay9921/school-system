@@ -14,7 +14,7 @@ class AddSoftDeleteToMaterialsTable extends Migration
     public function up()
     {
         Schema::table('materials', function (Blueprint $table) {
-            $table->softDeletes();
+            // $table->softDeletes();
         });
     }
 
