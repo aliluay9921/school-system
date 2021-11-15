@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DailyMaterial;
+use App\Models\User;
 use App\Traits\Pagination;
+use App\Models\Notification;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
+use App\Models\DailyMaterial;
 use Illuminate\Support\Facades\Validator;
 
 class DailyMaterialController extends Controller
@@ -88,6 +90,16 @@ class DailyMaterialController extends Controller
             'materials' => $request['materials'],
             'day' => $request['day'],
         ]);
+        $notify = Notification::create([
+            "title" => "تم تغير الجدول الاسبوعي الخاص بك",
+            "body"  => "يرجى الاطلاع على الجدول لمعرفة التغير الحاصل",
+            "from"  => auth()->user()->id,
+            "type"  => 1
+        ]);
+        $users = User::where('school_id', auth()->user()->school->id)->where('user_type', 3)->get();
+        foreach ($users as $user) {
+            $notify->users()->attach($user);
+        }
         return $this->send_response(200, "تم التعديل على الجدول", [], DailyMaterial::find($request['daily_material_id']));
     }
 

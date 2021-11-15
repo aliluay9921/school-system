@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\Notification;
 use App\Models\Report;
+use App\Models\User;
 use App\Traits\Pagination;
 use App\Traits\SendResponse;
 use Carbon\Carbon;
@@ -41,6 +43,7 @@ class CommentController extends Controller
             'parent_id.exists' => 'يجب ان ادخال تعليق صحيح',
             'body.required' => 'يجب ادخال نص للتعليق'
         ]);
+
         if ($validator->fails()) {
             return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
         }
@@ -57,8 +60,18 @@ class CommentController extends Controller
             'body' => $request['body'],
             'report_id' => $request['report_id']
         ];
+
         if (array_key_exists('parent_id', $request)) {
+            $re_comment = Comment::find($request['parent_id']);
+            $user = User::find($re_comment->user_id);
             $data['parent_id'] = $request['parent_id'];
+            $notify =  Notification::Create([
+                "title" => "تم اضافة رد على تعليقك",
+                "body"  => $report['body'],
+                "from"  => auth()->user()->id,
+                "type"  => 0
+            ]);
+            $notify->users()->attach($user);
         }
         $comment = Comment::Create($data);
         return $this->send_response(200, 'تم اضافة تعليق', [], Comment::with('user', 'parent', "parent.user")->find($comment->id));

@@ -12,11 +12,15 @@ class NotificationController extends Controller
     use SendResponse, Pagination;
     public function getNotification()
     {
-        if (auth()->user()->user_type == 3) {
-            $notification = Notification::with(["users" => function ($q) {
-                $q->where("user.id", auth()->user()->id);
-            }])->where("school_id", auth()->user()->school_id);
-        }
-        return $notification;
+
+        $notification = Notification::with("issuer")->whereHas("users", function ($q) {
+            $q->where("users.id", auth()->user()->id);
+        });
+        if (!isset($_GET['skip']))
+            $_GET['skip'] = 0;
+        if (!isset($_GET['limit']))
+            $_GET['limit'] = 10;
+        $res = $this->paging($notification,  $_GET['skip'],  $_GET['limit']);
+        return $this->send_response(200, 'تم جلب الاشعارات بنجاح', [], $res["model"], null, $res["count"]);
     }
 }

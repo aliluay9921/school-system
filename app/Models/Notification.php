@@ -16,4 +16,8 @@ class Notification extends Model
     {
         return $this->belongsToMany(User::class, 'notification_users', 'notification_id', 'user_id');
     }
+    public function issuer()
+    {
+        return $this->belongsTo(User::class, 'from');
+    }
 }
