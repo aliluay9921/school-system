@@ -171,7 +171,7 @@ class ReportController extends Controller
                 ]);
             }
         }
-        $this->send_notification($report);
+        // $this->send_notification($report);
 
         return $this->send_response(200, 'تم اضافة تبليغ بنجاح', [], Report::with('user', 'issuer', 'images', 'stage', 'material')->find($report->id));
     }
