@@ -74,6 +74,27 @@ class ExamController extends Controller
         ]);
         return $this->send_response(200, 'تم اضافة امتحان  بنجاح', [], Exam::with('material')->find($exam->id));
     }
+    public function editExam(Request $request)
+    {
+        $request = $request->json()->all();
+        $validator = Validator::make($request, [
+            'exam_id' => 'required|exists:exams,id',
+            'day'     => 'required',
+            'date'    => 'required|date',
+            'material_id' => 'required|exists:materials,id',
+            'lesson_number' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
+        }
+        Exam::find($request['exam_id'])->update([
+            'day' => $request['day'],
+            'date' => $request['date'],
+            'material_id' => $request['material_id'],
+            'lesson_number' => $request['lesson_number'],
+        ]);
+        return $this->send_response(200, "تم التعديل على جدول الامتحانات", [], Exam::with('material')->find($request['exam_id']));
+    }
     public function deleteExam(Request $request)
     {
         $request = $request->json()->all();

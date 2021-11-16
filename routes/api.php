@@ -16,6 +16,7 @@ use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\StageController;
 use App\Http\Controllers\UserController;
 use App\Models\DailyMaterial;
+use App\Models\Exam;
 use App\Models\Material;
 use App\Models\Material_stage_teacher;
 use App\Models\Notification;
@@ -77,6 +78,7 @@ Route::middleware('auth:api')->group(function () {
         route::post('add_degree', [DegreeController::class, 'addDegree']);
 
         route::put("edit_daily_material", [DailyMaterialController::class, "editDailyMaterial"]);
+        route::put("edit_exam", [ExamController::class, "editExam"]);
 
         route::delete('delete_user', [UserController::class, 'deleteUser']);
         route::delete('delete_daily_material', [DailyMaterialController::class, 'deleteDailyMaterial']);
