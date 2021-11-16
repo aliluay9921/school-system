@@ -20,6 +20,7 @@ use App\Models\Exam;
 use App\Models\Material;
 use App\Models\Material_stage_teacher;
 use App\Models\Notification;
+use App\Models\Report;
 use App\Models\Stage;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -85,6 +86,7 @@ Route::middleware('auth:api')->group(function () {
         route::delete('delete_exam', [ExamController::class, 'deleteExam']);
         route::delete('delete_semester', [SemesterController::class, 'deleteSemester']);
         route::delete('delete_material', [MaterialController::class, 'deleteMaterial']);
+        route::delete("delete_report", [ReportController::class, "deleteReport"]);
     });
     route::middleware('teacher')->group(function () {
         route::post('add_exam', [ExamController::class, 'addExam']);

@@ -212,4 +212,17 @@ class ReportController extends Controller
             return $this->send_response(200, 'تم التعديل على التبليغ', [], []);
         }
     }
+
+    public function deleteReport(Request $request)
+    {
+        $request = $request->json()->all();
+        $validator = Validator::make($request, [
+            'report_id' => 'required|exists:reports,id'
+        ]);
+        if ($validator->fails()) {
+            return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
+        }
+        Report::find($request['report_id'])->delete();
+        return $this->send_response(200, 'تم حذف الجدول', [], []);
+    }
 }
