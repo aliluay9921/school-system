@@ -90,8 +90,13 @@ class CommentController extends Controller
         if ($validator->fails()) {
             return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
         }
+        $comment =  Comment::find($request['comment_id']);
 
-        Comment::find($request['comment_id'])->delete();
-        return $this->send_response(200, 'تم حذف تعليق بنجاح', [], []);
+        if ($comment->user_id == auth()->user()->id || auth()->user()->id == 1) {
+            $comment->delete();
+            return $this->send_response(200, 'تم حذف تعليق بنجاح', [], []);
+        } else {
+            return $this->send_response(401, 'لايمكنك حذف تعليق غير خاص بك', [], []);
+        }
     }
 }
