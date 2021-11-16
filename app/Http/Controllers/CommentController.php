@@ -92,7 +92,7 @@ class CommentController extends Controller
         }
         $comment =  Comment::find($request['comment_id']);
 
-        if ($comment->user_id == auth()->user()->id || auth()->user()->id == 1) {
+        if ($comment->user_id == auth()->user()->id || auth()->user()->user_type == 1) {
             $comment->delete();
             return $this->send_response(200, 'تم حذف تعليق بنجاح', [], []);
         } else {
