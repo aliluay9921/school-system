@@ -94,7 +94,9 @@ class DailyMaterialController extends Controller
             "title" => "تم تغير الجدول الاسبوعي الخاص بك",
             "body"  => "يرجى الاطلاع على الجدول لمعرفة التغير الحاصل",
             "from"  => auth()->user()->id,
-            "type"  => 1
+            "type"  => 1,
+            "school_id" => auth()->user()->school->id
+
         ]);
         $users = User::where('school_id', auth()->user()->school->id)->where('user_type', 3)->get();
         foreach ($users as $user) {

@@ -69,7 +69,8 @@ class CommentController extends Controller
                 "title" => "تم اضافة رد على تعليقك",
                 "body"  => $report['body'],
                 "from"  => auth()->user()->id,
-                "type"  => 0
+                "type"  => 0,
+                "school_id" => auth()->user()->school->id
             ]);
             $notify->users()->attach($user);
         }
