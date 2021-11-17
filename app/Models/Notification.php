@@ -10,7 +10,7 @@ class Notification extends Model
 {
     use HasFactory, Uuids;
     protected $guarded = [];
-
+    protected $with = ["issuer", "comment"];
 
     public function comment()
     {

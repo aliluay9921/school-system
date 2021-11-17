@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Notification;
-use App\Models\Payment;
 use App\Models\User;
+use App\Models\Payment;
 use App\Traits\Pagination;
+use App\Models\Notification;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 
 class PaymentsController extends Controller
@@ -21,6 +22,22 @@ class PaymentsController extends Controller
             $payments->whereHas('user', function ($q) {
                 $q->where('user_type', $_GET['user_type']);
             });
+        }
+        if (isset($_GET['query'])) {
+            $columns = Schema::getColumnListing('payments');
+            foreach ($columns as $column) {
+                $payments->orWhere($column, 'LIKE', '%' . $_GET['query'] . '%');
+            }
+        }
+        if (isset($_GET)) {
+            foreach ($_GET as $key => $value) {
+                if ($key == 'skip' || $key == 'limit' || $key == 'query') {
+                    continue;
+                } else {
+                    $sort = $value == 'true' ? 'desc' : 'asc';
+                    $payments->orderBy($key,  $sort);
+                }
+            }
         }
         if (!isset($_GET['skip']))
             $_GET['skip'] = 0;

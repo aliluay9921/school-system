@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AbsentSockets;
+use App\Events\ReportClassSockets;
+use App\Events\ReportGeneralSockets;
 use App\Models\Image;
 use App\Models\Notification;
 use App\Models\Report;
@@ -20,51 +23,16 @@ class ReportController extends Controller
     {
         if ($report->type == 0) {
             $user = User::find($report->user_id);
-            $notification =  Notification::create([
-                'title' => 'تبليغ الغياب',
-                'body'  => $report->body,
-                'from'  => auth()->user()->id,
-                'type'  => $report->type
-            ]);
-            $notification->users()->attach($user);
+            broadcast(new AbsentSockets($report, $user));
         } elseif ($report->type == 1) {
-            $notification =  Notification::create([
-                'title' => 'تبليغ عام ',
-                'body'  => $report->body,
-                'from'  => auth()->user()->id,
-                'type'  => $report->type
-            ]);
-            $users = User::where('school_id', $report->school_id)->whereIn('user_type', [2, 3])->get();
-            foreach ($users as $user) {
-                $notification->users()->attach($user);
-            }
+            $school_id = auth()->user()->School->id;
+            broadcast(new ReportGeneralSockets($report, $school_id));
         } elseif ($report->type == 2) {
-            $notification =  Notification::create([
-                'title' => 'تبليغ خاص',
-                'body'  => $report->body,
-                'from'  => auth()->user()->id,
-                'type'  => $report->type
-            ]);
-            $users = User::where('school_id', $report->school_id)->where('class_id', $report->class_id)->get();
-            $notification->users()->attach($users);
+            broadcast(new ReportClassSockets($report, $report->class_id));
         } elseif ($report->type == 3) {
-            $notification =  Notification::create([
-                'title' => 'تبليغ امتحان',
-                'body'  => $report->body,
-                'from'  => auth()->user()->id,
-                'type'  => $report->type
-            ]);
-            $users = User::where('school_id', $report->school_id)->where('class_id', $report->class_id)->get();
-            $notification->users()->attach($users);
+            broadcast(new ReportClassSockets($report, $report->class_id));
         } else {
-            $notification =  Notification::create([
-                'title' => 'تبليغ واجب',
-                'body'  => $report->body,
-                'from'  => auth()->user()->id,
-                'type'  => $report->type
-            ]);
-            $users = User::where('school_id', $report->school_id)->where('class_id', $report->class_id)->get();
-            $notification->users()->attach($users);
+            broadcast(new ReportClassSockets($report, $report->class_id));
         }
     }
 
@@ -171,7 +139,7 @@ class ReportController extends Controller
                 ]);
             }
         }
-        // $this->send_notification($report);
+        $this->send_notification($report);
 
         return $this->send_response(200, 'تم اضافة تبليغ بنجاح', [], Report::with('user', 'issuer', 'images', 'stage', 'material')->find($report->id));
     }

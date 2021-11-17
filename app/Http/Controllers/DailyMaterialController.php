@@ -90,19 +90,19 @@ class DailyMaterialController extends Controller
             'materials' => $request['materials'],
             'day' => $request['day'],
         ]);
-        $notify = Notification::create([
-            "title" => "تم تغير الجدول الاسبوعي  ",
-            "body"  => "يرجى الاطلاع على الجدول لمعرفة التغير الحاصل",
-            "from"  => auth()->user()->id,
-            "target_id" => $request['daily_material_id'],
-            "type"  => 1,
-            "school_id" => auth()->user()->school->id
+        // $notify = Notification::create([
+        //     "title" => "تم تغير الجدول الاسبوعي  ",
+        //     "body"  => "يرجى الاطلاع على الجدول لمعرفة التغير الحاصل",
+        //     "from"  => auth()->user()->id,
+        //     "target_id" => $request['daily_material_id'],
+        //     "type"  => 1,
+        //     "school_id" => auth()->user()->school->id
 
-        ]);
-        $users = User::where('school_id', auth()->user()->school->id)->whereIn('user_type', [2, 3])->get();
-        foreach ($users as $user) {
-            $notify->users()->attach($user);
-        }
+        // ]);
+        // $users = User::where('school_id', auth()->user()->school->id)->whereIn('user_type', [2, 3])->get();
+        // foreach ($users as $user) {
+        //     $notify->users()->attach($user);
+        // }
         return $this->send_response(200, "تم التعديل على الجدول", [], DailyMaterial::find($request['daily_material_id']));
     }
 

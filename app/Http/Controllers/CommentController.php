@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AuthNotification;
 use App\Models\Comment;
 use App\Models\Notification;
 use App\Models\Report;
@@ -79,6 +80,7 @@ class CommentController extends Controller
             "school_id" => auth()->user()->school->id
         ]);
         $notify->users()->attach($user);
+        broadcast(new AuthNotification($notify, $user));
         return $this->send_response(200, 'تم اضافة تعليق', [], Comment::with('user', 'parent', "parent.user")->find($comment->id));
     }
 
