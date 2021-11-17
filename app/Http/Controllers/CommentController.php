@@ -67,7 +67,7 @@ class CommentController extends Controller
             $data['parent_id'] = $request['parent_id'];
             $notify =  Notification::Create([
                 "title" => "تم اضافة رد على تعليقك",
-                "body"  => $report['body'],
+                "body"  => $request['body'],
                 "from"  => auth()->user()->id,
                 "type"  => 0,
                 "school_id" => auth()->user()->school->id
