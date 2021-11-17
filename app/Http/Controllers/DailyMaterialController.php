@@ -99,7 +99,7 @@ class DailyMaterialController extends Controller
             "school_id" => auth()->user()->school->id
 
         ]);
-        $users = User::where('school_id', auth()->user()->school->id)->where('user_type', 3)->get();
+        $users = User::where('school_id', auth()->user()->school->id)->whereIn('user_type', [2, 3])->get();
         foreach ($users as $user) {
             $notify->users()->attach($user);
         }
