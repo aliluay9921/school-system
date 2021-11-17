@@ -15,15 +15,6 @@ use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\StageController;
 use App\Http\Controllers\UserController;
-use App\Models\DailyMaterial;
-use App\Models\Exam;
-use App\Models\Material;
-use App\Models\Material_stage_teacher;
-use App\Models\Notification;
-use App\Models\Report;
-use App\Models\Stage;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*

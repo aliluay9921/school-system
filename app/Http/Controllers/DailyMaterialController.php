@@ -91,9 +91,10 @@ class DailyMaterialController extends Controller
             'day' => $request['day'],
         ]);
         $notify = Notification::create([
-            "title" => "تم تغير الجدول الاسبوعي الخاص بك",
+            "title" => "تم تغير الجدول الاسبوعي  ",
             "body"  => "يرجى الاطلاع على الجدول لمعرفة التغير الحاصل",
             "from"  => auth()->user()->id,
+            "target_id" => $request['daily_material_id'],
             "type"  => 1,
             "school_id" => auth()->user()->school->id
 

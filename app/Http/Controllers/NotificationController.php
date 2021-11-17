@@ -13,7 +13,7 @@ class NotificationController extends Controller
     public function getNotification()
     {
 
-        $notification = Notification::with("issuer")->whereHas("users", function ($q) {
+        $notification = Notification::with("issuer", "comment", "dailyMaterial")->whereHas("users", function ($q) {
             $q->where("users.id", auth()->user()->id);
         });
         if (!isset($_GET['skip']))

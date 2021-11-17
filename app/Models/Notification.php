@@ -12,6 +12,14 @@ class Notification extends Model
     protected $guarded = [];
 
 
+    public function comment()
+    {
+        return $this->belongsTo(Comment::class, 'target_id');
+    }
+    public function dailyMaterial()
+    {
+        return $this->belongsTo(DailyMaterial::class, 'target_id');
+    }
     public function users()
     {
         return $this->belongsToMany(User::class, 'notification_users', 'notification_id', 'user_id');

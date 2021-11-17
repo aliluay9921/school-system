@@ -19,6 +19,8 @@ class CreateNotificationsTable extends Migration
             $table->string('body');
             $table->uuid('from');
             $table->integer('type');
+            $table->uuid('target_id')->nullable();
+            $table->uuid('school_id')->nullable();
             $table->boolean('seen')->default(false);
             $table->timestamps();
         });

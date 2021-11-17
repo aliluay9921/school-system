@@ -65,16 +65,20 @@ class CommentController extends Controller
             $re_comment = Comment::find($request['parent_id']);
             $user = User::find($re_comment->user_id);
             $data['parent_id'] = $request['parent_id'];
-            $notify =  Notification::Create([
-                "title" => "تم اضافة رد على تعليقك",
-                "body"  => $request['body'],
-                "from"  => auth()->user()->id,
-                "type"  => 0,
-                "school_id" => auth()->user()->school->id
-            ]);
-            $notify->users()->attach($user);
+            $comment = Comment::Create($data);
+        } else {
+            $comment = Comment::Create($data);
+            $user = $report->issuer_id;
         }
-        $comment = Comment::Create($data);
+        $notify =  Notification::Create([
+            "title" => array_key_exists('parent_id', $request) ? 'تم اضافة رد على تعليقك' : "تم اضافة تعليق على تبليغ خاص بك",
+            "body"  => $request['body'],
+            "target_id" => $comment->id,
+            "from"  => auth()->user()->id,
+            "type"  => 0,
+            "school_id" => auth()->user()->school->id
+        ]);
+        $notify->users()->attach($user);
         return $this->send_response(200, 'تم اضافة تعليق', [], Comment::with('user', 'parent', "parent.user")->find($comment->id));
     }
 
