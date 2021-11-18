@@ -6,6 +6,7 @@ use App\Models\Feedback;
 use App\Traits\Pagination;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 
 class FeedbackController extends Controller
@@ -15,6 +16,27 @@ class FeedbackController extends Controller
     public function getFeedbacks()
     {
         $feedbacks = Feedback::with('user')->where('school_id', auth()->user()->School->id);
+        if (isset($_GET['query'])) {
+            $feedbacks->where(function ($q) {
+                $columns = Schema::getColumnListing('feedbacks');
+                $q->whereHas('user', function ($q) {
+                    $q->Where('full_name', 'LIKE', '%' . $_GET['query'] . '%')->orWhere('phone_number', 'LIKE', '%' . $_GET['query'] . '%');
+                });
+                foreach ($columns as $column) {
+                    $q->orWhere($column, 'LIKE', '%' . $_GET['query'] . '%');
+                }
+            });
+        }
+        if (isset($_GET)) {
+            foreach ($_GET as $key => $value) {
+                if ($key == 'skip' || $key == 'limit' || $key == 'query') {
+                    continue;
+                } else {
+                    $sort = $value == 'true' ? 'desc' : 'asc';
+                    $feedbacks->orderBy($key,  $sort);
+                }
+            }
+        }
         if (!isset($_GET['skip']))
             $_GET['skip'] = 0;
         if (!isset($_GET['limit']))

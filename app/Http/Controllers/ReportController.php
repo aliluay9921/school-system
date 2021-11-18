@@ -84,7 +84,6 @@ class ReportController extends Controller
                     })->orWhereHas('stage', function ($q) {
                         $q->Where('name', 'LIKE', '%' . $_GET['query'] . '%');
                     });
-
                     foreach ($columns as $column) {
                         $q->orWhere($column, 'LIKE', '%' . $_GET['query'] . '%');
                     }
