@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\AuthNotification;
-use App\Models\Comment;
-use App\Models\Notification;
-use App\Models\Report;
-use App\Models\User;
-use App\Traits\Pagination;
-use App\Traits\SendResponse;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Report;
+use App\Models\Comment;
+use App\Traits\Pagination;
+use App\Models\Notification;
+use App\Traits\SendResponse;
 use Illuminate\Http\Request;
+use App\Events\AuthNotification;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
@@ -22,6 +23,24 @@ class CommentController extends Controller
         $comments = Comment::with('user', 'parent', "parent.user", "report", "report.issuer")->where('school_id', auth()->user()->School->id);
         if (isset($_GET['report_id'])) {
             $comments->where('report_id', $_GET['report_id']);
+        }
+        if (isset($_GET['query'])) {
+            $comments->where(function ($q) {
+                $columns = Schema::getColumnListing('comments');
+                foreach ($columns as $column) {
+                    $q->orWhere($column, 'LIKE', '%' . $_GET['query'] . '%');
+                }
+            });
+        }
+        if (isset($_GET)) {
+            foreach ($_GET as $key => $value) {
+                if ($key == 'skip' || $key == 'limit' || $key == 'query') {
+                    continue;
+                } else {
+                    $sort = $value == 'true' ? 'desc' : 'asc';
+                    $comments->orderBy($key,  $sort);
+                }
+            }
         }
         if (!isset($_GET['skip']))
             $_GET['skip'] = 0;

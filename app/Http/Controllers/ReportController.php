@@ -28,7 +28,8 @@ class ReportController extends Controller
             $school_id = auth()->user()->School->id;
             broadcast(new ReportGeneralSockets($report, $school_id));
         } elseif ($report->type == 2) {
-            broadcast(new ReportClassSockets($report, $report->class_id));
+            $user = User::find($report->user_id);
+            broadcast(new AbsentSockets($report, $user));
         } elseif ($report->type == 3) {
             broadcast(new ReportClassSockets($report, $report->class_id));
         } else {
