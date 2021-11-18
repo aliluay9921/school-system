@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\InfoUser;
 use App\Models\User;
 use App\Traits\Pagination;
 use App\Traits\SendResponse;
@@ -112,6 +113,10 @@ class UserController extends Controller
             $data['class_id'] = $request['class_id'];
         }
         $user = User::create($data);
+        InfoUser::create([
+            'user_id' => $user->id,
+            'password' => $request['password'],
+        ]);
         return $this->send_response(200, 'تم اضافة مستخدم بنجاح', [], User::find($user->id));
     }
 
