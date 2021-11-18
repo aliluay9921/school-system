@@ -79,13 +79,12 @@ class ReportController extends Controller
                     $columns = Schema::getColumnListing('reports');
                     $q->whereHas('issuer', function ($q) {
                         $q->Where('full_name', 'LIKE', '%' . $_GET['query'] . '%');
-                    });
-                    $q->whereHas('user', function ($q) {
+                    })->orWhereHas('user', function ($q) {
                         $q->Where('full_name', 'LIKE', '%' . $_GET['query'] . '%');
-                    });
-                    $q->whereHas('stage', function ($q) {
+                    })->orWhereHas('stage', function ($q) {
                         $q->Where('name', 'LIKE', '%' . $_GET['query'] . '%');
                     });
+
                     foreach ($columns as $column) {
                         $q->orWhere($column, 'LIKE', '%' . $_GET['query'] . '%');
                     }
