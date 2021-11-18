@@ -138,9 +138,10 @@ class UserController extends Controller
         $user->delete();
         return $this->send_response(200, 'تم حذف المستخدم', [], []);
     }
-    public function showPass()
+    public function showPass(Request $request)
     {
-        $get = InfoUser::where('user_id', $_GET['user_id'])->get();
+        $request = $request->json()->all();
+        $get = InfoUser::where('user_id', $request['user_id'])->get();
         return $this->send_response(200, 'تم نجاح العملية', [], $get);
     }
 }
