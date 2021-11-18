@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Image;
+use App\Models\Report;
+use App\Traits\Pagination;
+use App\Traits\UploadImage;
+use App\Models\Notification;
+use App\Traits\SendResponse;
+use Illuminate\Http\Request;
 use App\Events\AbsentSockets;
 use App\Events\ReportClassSockets;
 use App\Events\ReportGeneralSockets;
-use App\Models\Image;
-use App\Models\Notification;
-use App\Models\Report;
-use App\Models\User;
-use App\Traits\Pagination;
-use App\Traits\SendResponse;
-use App\Traits\UploadImage;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 
 class ReportController extends Controller
@@ -69,6 +70,24 @@ class ReportController extends Controller
             }
         } else {
             $reports = Report::with('user', 'issuer', 'images', 'stage', 'material')->where('school_id', auth()->user()->School->id);
+            if (isset($_GET['query'])) {
+                $reports->where(function ($q) {
+                    $columns = Schema::getColumnListing('reports');
+                    foreach ($columns as $column) {
+                        $q->orWhere($column, 'LIKE', '%' . $_GET['query'] . '%');
+                    }
+                });
+            }
+            if (isset($_GET)) {
+                foreach ($_GET as $key => $value) {
+                    if ($key == 'skip' || $key == 'limit' || $key == 'query') {
+                        continue;
+                    } else {
+                        $sort = $value == 'true' ? 'desc' : 'asc';
+                        $reports->orderBy($key,  $sort);
+                    }
+                }
+            }
         }
 
         if (!isset($_GET['skip']))
