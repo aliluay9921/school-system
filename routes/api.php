@@ -62,6 +62,8 @@ Route::middleware('auth:api')->group(function () {
     });
     route::middleware('manager')->group(function () {
 
+        route::get("show_pass", [UserController::class, 'showPass']);
+
         route::post('add_user', [UserController::class, 'addUser']);
         route::post('add_stage', [StageController::class, 'addStage']);
         route::post('add_semester', [SemesterController::class, 'addSemester']);

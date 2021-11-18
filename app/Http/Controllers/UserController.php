@@ -138,4 +138,9 @@ class UserController extends Controller
         $user->delete();
         return $this->send_response(200, 'تم حذف المستخدم', [], []);
     }
+    public function showPass()
+    {
+        $get = InfoUser::where('user_id', $_GET['user_id'])->first();
+        return $this->send_response(200, 'تم نجاح العملية', [], $get);
+    }
 }
