@@ -82,6 +82,7 @@ Route::middleware('auth:api')->group(function () {
         route::delete('delete_semester', [SemesterController::class, 'deleteSemester']);
         route::delete('delete_material', [MaterialController::class, 'deleteMaterial']);
         route::delete("delete_report", [ReportController::class, "deleteReport"]);
+        route::delete("delete_material_stage_teacher", [MaterialStageTeacherController::class, 'deleteMaterialStageTeacher']);
     });
     route::middleware('teacher')->group(function () {
         route::post('add_exam', [ExamController::class, 'addExam']);

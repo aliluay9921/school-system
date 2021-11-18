@@ -85,4 +85,17 @@ class MaterialStageTeacherController extends Controller
         ]);
         return $this->send_response(200, 'تم اضافة مدرس الى صف ومادة', [], Material_stage_teacher::find($add->id));
     }
+
+    public function deleteMaterialStageTeacher(Request $request)
+    {
+        $request = $request->json()->all();
+        $validator = Validator::make($request, [
+            'id' => 'required|exists:material_stage_teachers,id'
+        ]);
+        if ($validator->fails()) {
+            return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
+        }
+        Material_stage_teacher::find($request['id'])->delete();
+        return $this->send_response(200, 'تم حذف ', [], []);
+    }
 }
