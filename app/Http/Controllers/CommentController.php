@@ -88,7 +88,7 @@ class CommentController extends Controller
             $comment = Comment::Create($data);
         } else {
             $comment = Comment::Create($data);
-            $user = $report->issuer_id;
+            $user = User::find($report->issuer_id);
         }
         $notify =  Notification::Create([
             "title" => array_key_exists('parent_id', $request) ? 'تم اضافة رد على تعليقك' : "تم اضافة تعليق على تبليغ خاص بك",
