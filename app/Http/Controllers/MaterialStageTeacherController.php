@@ -32,13 +32,22 @@ class MaterialStageTeacherController extends Controller
                 }
             });
         }
-
+        // if (isset($_GET)) {
+        //     foreach ($_GET as $key => $value) {
+        //         if ($key == 'skip' || $key == 'limit' || $key == 'query') {
+        //             continue;
+        //         } else {
+        //             $get->where($key, $value);
+        //         }
+        //     }
+        // }
         if (isset($_GET)) {
             foreach ($_GET as $key => $value) {
                 if ($key == 'skip' || $key == 'limit' || $key == 'query') {
                     continue;
                 } else {
-                    $get->where($key, $value);
+                    $sort = $value == 'true' ? 'desc' : 'asc';
+                    $get->orderBy($key,  $sort);
                 }
             }
         }
