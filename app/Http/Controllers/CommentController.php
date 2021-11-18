@@ -27,6 +27,9 @@ class CommentController extends Controller
         if (isset($_GET['query'])) {
             $comments->where(function ($q) {
                 $columns = Schema::getColumnListing('comments');
+                $q->whereHas('user', function ($q) {
+                    $q->Where('full_name', 'LIKE', '%' . $_GET['query'] . '%');
+                });
                 foreach ($columns as $column) {
                     $q->orWhere($column, 'LIKE', '%' . $_GET['query'] . '%');
                 }
