@@ -70,6 +70,10 @@ class ReportController extends Controller
             }
         } else {
             $reports = Report::with('user', 'issuer', 'images', 'stage', 'material')->where('school_id', auth()->user()->School->id);
+            if (isset($_GET['filter'])) {
+                $filter = json_decode($_GET['filter']); //لان اوبجكت لازم تفتحه
+                $reports->where($filter->name, $filter->value);
+            }
             if (isset($_GET['query'])) {
                 $reports->where(function ($q) {
                     $columns = Schema::getColumnListing('reports');
@@ -80,7 +84,7 @@ class ReportController extends Controller
             }
             if (isset($_GET)) {
                 foreach ($_GET as $key => $value) {
-                    if ($key == 'skip' || $key == 'limit' || $key == 'query') {
+                    if ($key == 'skip' || $key == 'limit' || $key == 'query' || $key == 'filter') {
                         continue;
                     } else {
                         $sort = $value == 'true' ? 'desc' : 'asc';
