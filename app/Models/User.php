@@ -40,6 +40,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    protected $appends = ["fee"];
 
 
 
@@ -87,5 +88,11 @@ class User extends Authenticatable
     public function notifications()
     {
         return $this->belongsToMany(Notification::class, 'notification_users', 'user_id', 'notification_id');
+    }
+
+    public function getFeeAttribute()
+    {
+        $payment = Payment::where('user_id', $this->id)->sum('value');
+        return $payment;
     }
 }
