@@ -80,6 +80,12 @@ class ReportController extends Controller
                     $q->whereHas('issuer', function ($q) {
                         $q->Where('full_name', 'LIKE', '%' . $_GET['query'] . '%');
                     });
+                    $q->whereHas('user', function ($q) {
+                        $q->Where('full_name', 'LIKE', '%' . $_GET['query'] . '%');
+                    });
+                    $q->whereHas('stage', function ($q) {
+                        $q->Where('name', 'LIKE', '%' . $_GET['query'] . '%');
+                    });
                     foreach ($columns as $column) {
                         $q->orWhere($column, 'LIKE', '%' . $_GET['query'] . '%');
                     }
