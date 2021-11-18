@@ -140,7 +140,7 @@ class UserController extends Controller
     }
     public function showPass()
     {
-        $get = InfoUser::where('user_id', $_GET['user_id'])->first();
+        $get = InfoUser::where('user_id', $_GET['user_id'])->get();
         return $this->send_response(200, 'تم نجاح العملية', [], $get);
     }
 }
