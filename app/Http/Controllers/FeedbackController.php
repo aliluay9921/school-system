@@ -20,7 +20,7 @@ class FeedbackController extends Controller
             $feedbacks->where(function ($q) {
                 $columns = Schema::getColumnListing('feedbacks');
                 $q->whereHas('user', function ($q) {
-                    $q->Where('full_name', 'LIKE', '%' . $_GET['query'] . '%');
+                    $q->Where('full_name', 'LIKE', '%' . $_GET['query'] . '%')->orWhere('phone_number', 'LIKE', '%' . $_GET['query'] . '%');
                 });
                 foreach ($columns as $column) {
                     $q->orWhere($column, 'LIKE', '%' . $_GET['query'] . '%');
