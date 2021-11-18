@@ -77,7 +77,7 @@ class ReportController extends Controller
             if (isset($_GET['query'])) {
                 $reports->where(function ($q) {
                     $columns = Schema::getColumnListing('reports');
-                    $q->whereHas('user', function ($q) {
+                    $q->whereHas('issuer', function ($q) {
                         $q->Where('full_name', 'LIKE', '%' . $_GET['query'] . '%');
                     });
                     foreach ($columns as $column) {
