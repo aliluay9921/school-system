@@ -15,10 +15,27 @@ class MaterialStageTeacherController extends Controller
 
     public function getMaterialStageTeacher()
     {
-        $get = Material_stage_teacher::with('user')->where('school_id', auth()->user()->School->id);
+        $get = Material_stage_teacher::where('school_id', auth()->user()->School->id);
+
+        if (isset($_GET['query'])) {
+            $get->where(function ($q) {
+                $columns = Schema::getColumnListing('material_stage_teachers');
+                $q->whereHas('material', function ($q) {
+                    $q->Where('name', 'LIKE', '%' . $_GET['query'] . '%');
+                })->orWhereHas('user', function ($q) {
+                    $q->Where('full_name', 'LIKE', '%' . $_GET['query'] . '%');
+                })->orWhereHas('stage', function ($q) {
+                    $q->Where('name', 'LIKE', '%' . $_GET['query'] . '%');
+                });
+                foreach ($columns as $column) {
+                    $q->orWhere($column, 'LIKE', '%' . $_GET['query'] . '%');
+                }
+            });
+        }
+
         if (isset($_GET)) {
             foreach ($_GET as $key => $value) {
-                if ($key == 'skip' || $key == 'limit') {
+                if ($key == 'skip' || $key == 'limit' || $key == 'query') {
                     continue;
                 } else {
                     $get->where($key, $value);
