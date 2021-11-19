@@ -160,16 +160,17 @@ class ReportController extends Controller
         if (array_key_exists('from_time', $request)) {
             $data['from_time'] = $request['from_time'];
         }
-        $report = Report::create($data);
+        $new_report = Report::create($data);
         if (array_key_exists('images', $request)) {
             foreach ($request['images'] as $image) {
                 Image::create([
                     'image' => $this->uploadPicture($image, '/images/'),
-                    'report_id' => $report->id,
+                    'report_id' => $new_report->id,
                     'school_id' => auth()->user()->School->id
                 ]);
             }
         }
+        $report = Report::with('user', 'issuer', 'images', 'stage', 'material')->find($new_report->id);
         $this->send_notification($report);
 
         return $this->send_response(200, 'تم اضافة تبليغ بنجاح', [], Report::with('user', 'issuer', 'images', 'stage', 'material')->find($report->id));

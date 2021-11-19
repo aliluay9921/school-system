@@ -89,20 +89,35 @@ class CommentController extends Controller
             $user = User::find($re_comment->user_id);
             $data['parent_id'] = $request['parent_id'];
             $comment = Comment::Create($data);
+            if (auth()->user()->id != $re_comment->user_id) {
+                $notify =  Notification::Create([
+                    "title" => 'تم اضافة رد على تعليقك',
+                    "body"  => $request['body'],
+                    "target_id" => $comment->id,
+                    "from"  => auth()->user()->id,
+                    "type"  => 0,
+                    "school_id" => auth()->user()->school->id
+                ]);
+                $notify->users()->attach($user);
+                broadcast(new AuthNotification($notify, $user));
+            }
         } else {
             $comment = Comment::Create($data);
             $user = User::find($report->issuer_id);
+            $notify =  Notification::Create([
+                "title" =>  'تم اضافة تعليق على تبليغ خاص بك',
+                "body"  => $request['body'],
+                "target_id" => $comment->id,
+                "from"  => auth()->user()->id,
+                "type"  => 0,
+                "school_id" => auth()->user()->school->id
+            ]);
+            $notify->users()->attach($user);
+            broadcast(new AuthNotification($notify, $user));
         }
-        $notify =  Notification::Create([
-            "title" => array_key_exists('parent_id', $request) ? 'تم اضافة رد على تعليقك' : "تم اضافة تعليق على تبليغ خاص بك",
-            "body"  => $request['body'],
-            "target_id" => $comment->id,
-            "from"  => auth()->user()->id,
-            "type"  => 0,
-            "school_id" => auth()->user()->school->id
-        ]);
-        $notify->users()->attach($user);
-        broadcast(new AuthNotification($notify, $user));
+
+
+
         return $this->send_response(200, 'تم اضافة تعليق', [], Comment::with('user', 'parent', "parent.user")->find($comment->id));
     }
 
