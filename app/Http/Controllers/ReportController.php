@@ -140,11 +140,13 @@ class ReportController extends Controller
         }
         $data = [];
         $data = [
-            'body' => $request['body'],
             'type' => $request['type'],
             'issuer_id' => auth()->user()->id,
             'school_id' => auth()->user()->School->id
         ];
+        if (array_key_exists('body', $request)) {
+            $data['body'] = $request['body'];
+        }
         if (array_key_exists('material_id', $request)) {
             $data['material_id'] = $request['material_id'];
         }
