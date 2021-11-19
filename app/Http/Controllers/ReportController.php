@@ -118,7 +118,7 @@ class ReportController extends Controller
             'material_id' =>  $request['type'] == 3 || $request['type'] == 4 ? 'required|exists:materials,id' : '',
             'user_id' => $request['type'] == 0 ? 'required|exists:users,id' : '',
             'class_id' => $request['type'] == 3 || $request['type'] == 4 ? 'required|exists:stages,id' : '',
-            'body' => $request['type'] == 3 || $request['type'] == 4 ? 'required' : '',
+            'body' => $request['type'] == 0 || $request['type'] == 1 || $request['type'] == 2 ? 'required' : '',
             'to_time' => 'required_with:from_time|after:from_time',
             'from_time' => 'required_with:to_time'
         ], [
