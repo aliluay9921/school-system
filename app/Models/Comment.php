@@ -12,6 +12,7 @@ class Comment extends Model
     use HasFactory, Uuids, SoftDeletes;
     protected $guarded = [];
     protected $dates = ['deleted_at'];
+    protected $with = ['user', 'parent', "parent.user", "report", "report.issuer"];
 
     public function user()
     {
