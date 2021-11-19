@@ -104,14 +104,16 @@ class CommentController extends Controller
         } else {
             $comment = Comment::Create($data);
             $user = User::find($report->issuer_id);
-            $notify =  Notification::Create([
-                "title" =>  'تم اضافة تعليق على تبليغ خاص بك',
-                "body"  => $request['body'],
-                "target_id" => $comment->id,
-                "from"  => auth()->user()->id,
-                "type"  => 0,
-                "school_id" => auth()->user()->school->id
-            ]);
+            if (auth()->user()->id != $report->issuer_id) {
+                $notify =  Notification::Create([
+                    "title" =>  'تم اضافة تعليق على تبليغ خاص بك',
+                    "body"  => $request['body'],
+                    "target_id" => $comment->id,
+                    "from"  => auth()->user()->id,
+                    "type"  => 0,
+                    "school_id" => auth()->user()->school->id
+                ]);
+            }
             $notify->users()->attach($user);
             broadcast(new AuthNotification($notify, $user));
         }
