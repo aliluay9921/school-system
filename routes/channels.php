@@ -35,8 +35,8 @@ Broadcast::channel('class_report.{class_id}', function ($user, $class_id) {
     return  $user->class_id === $class_id;
 });
 Broadcast::channel('comment_socket.{report_id}', function ($user, $report_id) {
-    // $reports = Report::where('id', $report_id)->where(function ($q) use ($user) {
-    //     $q->Where('issuer_id', $user->id)->orWhere('user_id', $user->id);
-    // })->get();
-    return true; // count($reports) > 0;
+    $reports = Report::where('id', $report_id)->where(function ($q) use ($user) {
+        $q->Where('issuer_id', $user->id)->orWhere('user_id', $user->id);
+    })->get();
+    return  $reports->count() > 0;
 });
