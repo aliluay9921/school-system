@@ -22,10 +22,13 @@ class ReportClassSockets implements ShouldBroadcast
 
     public $report;
     public $class_id;
-    public function __construct($report, $class_id)
+    public $type;
+
+    public function __construct($report, $class_id, $type)
     {
         $this->report = $report;
         $this->class_id = $class_id;
+        $type->type = $type;
     }
 
 

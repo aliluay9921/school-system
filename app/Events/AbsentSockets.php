@@ -10,6 +10,8 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
+use function PHPSTORM_META\type;
+
 class AbsentSockets implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
@@ -22,10 +24,12 @@ class AbsentSockets implements ShouldBroadcast
 
     public $report;
     public $user;
-    public function __construct($report, $user)
+    public $type;
+    public function __construct($report, $user, $type)
     {
         $this->report = $report;
         $this->user = $user;
+        $type->type = $type;
     }
 
     /**

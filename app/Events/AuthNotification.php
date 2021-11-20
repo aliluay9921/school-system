@@ -22,10 +22,13 @@ class AuthNotification implements ShouldBroadcast
 
     public $notify;
     public $user;
-    public function __construct($notify, $user)
+    public $type;
+
+    public function __construct($notify, $user, $type)
     {
         $this->notify = $notify;
         $this->user = $user;
+        $type->type = $type;
     }
 
     /**

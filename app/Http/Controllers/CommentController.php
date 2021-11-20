@@ -11,6 +11,7 @@ use App\Models\Notification;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
 use App\Events\AuthNotification;
+use App\Events\CommentSocket;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 
@@ -99,7 +100,7 @@ class CommentController extends Controller
                     "school_id" => auth()->user()->school->id
                 ]);
                 $notify->users()->attach($user);
-                broadcast(new AuthNotification($notify, $user));
+                broadcast(new AuthNotification($notify, $user, "comment"));
             }
         } else {
             $comment = Comment::Create($data);
@@ -114,9 +115,11 @@ class CommentController extends Controller
                     "school_id" => auth()->user()->school->id
                 ]);
                 $notify->users()->attach($user);
-                broadcast(new AuthNotification($notify, $user));
+                broadcast(new AuthNotification($notify, $user, "comment"));
             }
         }
+
+        broadcast(new CommentSocket($comment, $report, "add"));
 
 
 
@@ -136,7 +139,9 @@ class CommentController extends Controller
         if ($validator->fails()) {
             return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
         }
+
         $comment =  Comment::find($request['comment_id']);
+        broadcast(new CommentSocket($comment, $comment->report, "delete"));
 
         if ($comment->user_id == auth()->user()->id || auth()->user()->user_type == 1) {
             $comment->delete();

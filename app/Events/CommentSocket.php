@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ReportGeneralSockets implements ShouldBroadcast
+class CommentSocket implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -20,14 +20,14 @@ class ReportGeneralSockets implements ShouldBroadcast
      * @return void
      */
 
+    public $comment;
     public $report;
-    public $school_id;
     public $type;
 
-    public function __construct($report, $school_id, $type)
+    public function __construct($comment, $report, $type)
     {
+        $this->comment = $comment;
         $this->report = $report;
-        $this->school_id = $school_id;
         $type->type = $type;
     }
 
@@ -38,7 +38,7 @@ class ReportGeneralSockets implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        $school_id = $this->school_id;
-        return new PrivateChannel('general_reports.' . $school_id);
+        $id = $this->report->id;
+        return new PrivateChannel('comment_socket.' . $id);
     }
 }

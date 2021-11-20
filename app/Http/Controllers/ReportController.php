@@ -20,21 +20,21 @@ class ReportController extends Controller
 {
     use SendResponse, UploadImage, Pagination;
 
-    public function send_notification($report)
+    public function send_notification($report, $notification_type)
     {
         if ($report->type == 0) {
             $user = User::find($report->user_id);
-            broadcast(new AbsentSockets($report, $user));
+            broadcast(new AbsentSockets($report, $user, $notification_type));
         } elseif ($report->type == 1) {
             $school_id = auth()->user()->School->id;
-            broadcast(new ReportGeneralSockets($report, $school_id));
+            broadcast(new ReportGeneralSockets($report, $school_id, $notification_type));
         } elseif ($report->type == 2) {
             $user = User::find($report->user_id);
-            broadcast(new AbsentSockets($report, $user));
+            broadcast(new AbsentSockets($report, $user, $notification_type));
         } elseif ($report->type == 3) {
-            broadcast(new ReportClassSockets($report, $report->class_id));
+            broadcast(new ReportClassSockets($report, $report->class_id, $notification_type));
         } else {
-            broadcast(new ReportClassSockets($report, $report->class_id));
+            broadcast(new ReportClassSockets($report, $report->class_id, $notification_type));
         }
     }
 
@@ -173,7 +173,7 @@ class ReportController extends Controller
             }
         }
         $report = Report::with('user', 'issuer', 'images', 'stage', 'material')->find($new_report->id);
-        $this->send_notification($report);
+        $this->send_notification($report, "add");
 
         return $this->send_response(200, 'تم اضافة تبليغ بنجاح', [], Report::with('user', 'issuer', 'images', 'stage', 'material')->find($report->id));
     }
@@ -194,6 +194,7 @@ class ReportController extends Controller
             $report->update([
                 "body" => $request['body'],
             ]);
+            $this->send_notification(Report::find($request['report_id']), "edit");
             return $this->send_response(200, 'تم التعديل على التبليغ', [], []);
         } elseif ($request['type'] == 1) {
             $images = [];
@@ -208,9 +209,11 @@ class ReportController extends Controller
                 ]);
                 $images[] = $new_image;
             }
+            $this->send_notification(Report::find($request['report_id']), "edit");
             return $this->send_response(200, 'تم التعديل على التبليغ', [], $images);
         } else {
             Image::find($request['image_id'])->delete();
+            $this->send_notification(Report::find($request['report_id']), "edit");
             return $this->send_response(200, 'تم التعديل على التبليغ', [], []);
         }
     }
@@ -224,7 +227,9 @@ class ReportController extends Controller
         if ($validator->fails()) {
             return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
         }
-        Report::find($request['report_id'])->delete();
-        return $this->send_response(200, 'تم حذف الجدول', [], []);
+        $report = Report::find($request['report_id']);
+        $this->send_notification($report, "delete");
+        $report->delete();
+        return $this->send_response(200, 'تم حذف التبليغ', [], []);
     }
 }
