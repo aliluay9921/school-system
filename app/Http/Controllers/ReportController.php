@@ -35,7 +35,7 @@ class ReportController extends Controller
         } elseif ($report->type == 1) {
             $school_id = auth()->user()->School->id;
             $tokens = FirebaseToken::whereHas("user", function ($q) {
-                $q->where("school_id", auth()->user()->school_id);
+                $q->where("school_id", auth()->user()->school->id);
             });
             if ($notification_type != "delete") {
                 foreach ($tokens as $token) {
