@@ -12,12 +12,13 @@ use App\Traits\SendResponse;
 use Illuminate\Http\Request;
 use App\Events\AuthNotification;
 use App\Events\CommentSocket;
+use App\Traits\SendNotificationFirebase;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
 {
-    use SendResponse, Pagination;
+    use SendResponse, Pagination, SendNotificationFirebase;
 
     public function getCommtns()
     {
@@ -101,6 +102,9 @@ class CommentController extends Controller
                 ]);
                 $notify->users()->attach($user);
                 broadcast(new AuthNotification($notify, $user, "comment"));
+                foreach ($user->firebaseTokens as $token) {
+                    $this->send_notification_firebase("تم اضافة رد على تعليقك", $request['body'], $token);
+                }
             }
         } else {
             $comment = Comment::Create($data);
@@ -116,6 +120,9 @@ class CommentController extends Controller
                 ]);
                 $notify->users()->attach($user);
                 broadcast(new AuthNotification($notify, $user, "comment"));
+                foreach ($user->firebaseTokens as $token) {
+                    $this->send_notification_firebase("تم اضافة تعليق على تبليغ خاص بك", $request['body'], $token);
+                }
             }
         }
 
