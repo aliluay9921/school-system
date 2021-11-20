@@ -8,7 +8,7 @@ use Kreait\Firebase\Messaging\Notification;
 
 trait SendNotificationFirebase
 {
-    public function send_notification($title, $body, $token)
+    public function send_notification_firebase($title, $body, $token)
     {
         $factory = (new Factory)->withServiceAccount(__DIR__ . '/firebase.json');
         $messaging = $factory->createMessaging();

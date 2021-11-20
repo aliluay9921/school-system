@@ -37,6 +37,9 @@ route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->group(function () {
     Broadcast::routes();
 
+
+
+
     route::get('get_users', [UserController::class, 'getUsers']);
     route::get('auth_info', [AuthController::class, 'authInfo']);
     route::get('get_material_stage_teacher', [MaterialStageTeacherController::class, 'getMaterialStageTeacher']);

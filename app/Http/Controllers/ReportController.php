@@ -13,17 +13,21 @@ use Illuminate\Http\Request;
 use App\Events\AbsentSockets;
 use App\Events\ReportClassSockets;
 use App\Events\ReportGeneralSockets;
+use App\Traits\SendNotificationFirebase;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 
 class ReportController extends Controller
 {
-    use SendResponse, UploadImage, Pagination;
+    use SendResponse, UploadImage, Pagination, SendNotificationFirebase;
 
     public function send_notification($report, $notification_type)
     {
         if ($report->type == 0) {
             $user = User::find($report->user_id);
+            foreach ($user->firebaseTokens as $ObjToken) {
+                $this->send_notification_firebase("تبليغ غياب", $report->body, $ObjToken->token);
+            }
             broadcast(new AbsentSockets($report, $user, $notification_type));
         } elseif ($report->type == 1) {
             $school_id = auth()->user()->School->id;
