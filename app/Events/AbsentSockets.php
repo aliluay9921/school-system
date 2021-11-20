@@ -29,7 +29,7 @@ class AbsentSockets implements ShouldBroadcast
     {
         $this->report = $report;
         $this->user = $user;
-        $type->type = $type;
+        $this->type = $type;
     }
 
     /**

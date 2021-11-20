@@ -28,7 +28,7 @@ class ReportClassSockets implements ShouldBroadcast
     {
         $this->report = $report;
         $this->class_id = $class_id;
-        $type->type = $type;
+        $this->type = $type;
     }
 
 

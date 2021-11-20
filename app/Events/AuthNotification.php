@@ -28,7 +28,7 @@ class AuthNotification implements ShouldBroadcast
     {
         $this->notify = $notify;
         $this->user = $user;
-        $type->type = $type;
+        $this->type = $type;
     }
 
     /**

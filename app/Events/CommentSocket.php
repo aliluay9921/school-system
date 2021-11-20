@@ -28,7 +28,7 @@ class CommentSocket implements ShouldBroadcast
     {
         $this->comment = $comment;
         $this->report = $report;
-        $type->type = $type;
+        $this->type = $type;
     }
 
     /**
