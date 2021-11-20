@@ -20,17 +20,18 @@ class AuthController extends Controller
         $validator = Validator::make($request, [
             'user_name' => 'required',
             'password' => 'required',
-            "token" => 'required',
         ]);
         if ($validator->fails()) {
             return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
         }
         if (Auth::attempt(['user_name' => $request['user_name'], 'password' => $request['password']])) {
             $user = Auth::user();
-            FirebaseToken::Create([
-                "user_id" => $user->id,
-                "token" => $request['token']
-            ]);
+            if (array_key_exists('token', $request)) {
+                FirebaseToken::Create([
+                    "user_id" => $user->id,
+                    "token" => $request['token']
+                ]);
+            }
             $token = $user->createToken($user->user_name)->accessToken;
             return $this->send_response(200, 'تم تسجيل الدخول بنجاح', [], User::with('school', 'stage', 'materials_stages_teachers')->find($user->id), $token);
         } else {
