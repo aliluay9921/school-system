@@ -10,7 +10,7 @@ class Report extends Model
 {
     use HasFactory, Uuids;
     protected $guarded = [];
-
+    protected $with = ['user', 'issuer', 'images', 'stage', 'material'];
 
     public function user()
     {
@@ -38,5 +38,9 @@ class Report extends Model
     public function images()
     {
         return $this->hasMany(Image::class, 'report_id');
+    }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, "report_id");
     }
 }

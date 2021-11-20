@@ -42,7 +42,7 @@ class ReportController extends Controller
     public function getReports()
     {
         if (auth()->user()->user_type == 2) {
-            $reports = Report::with('user', 'issuer', 'images', 'stage', 'material')->where('school_id', auth()->user()->School->id)->where(function ($q) {
+            $reports = Report::where('school_id', auth()->user()->School->id)->where(function ($q) {
                 $q->orWhere('issuer_id', auth()->user()->id)->orWhere('type', 1);
             });
             //    الية عمل الفلتر ب اكثر من بارميتر 
