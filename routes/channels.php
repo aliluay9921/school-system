@@ -38,5 +38,6 @@ Broadcast::channel('comment_socket.{report_id}', function ($user, $report_id) {
     $reports = Report::where('id', $report_id)->where(function ($q) use ($user) {
         $q->Where('issuer_id', $user->id)->orWhere('user_id', $user->id);
     })->get();
-    return  $reports->count() > 0;
+    error_log("" . $reports->count());
+    return $reports->count() > 0;
 });
