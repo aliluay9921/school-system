@@ -1,0 +1,12 @@
+{
+    "type": "service_account",
+    "project_id": "flightbookingsys",
+    "private_key_id": "7f0b186e6a46cda505690f9b8cecb388396990de",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC07Bd+dx45Flyp\nSdrLjygSRRtPEPWD8CBk0Yd3h/7tY9YaX5G6KvAWd35ZZlQpucAdZzabfAEq9w0K\nnuA3cixD/fK9juUNNrsNtLp5ecq2pW/9hVwYoyQCAk2ubNk4EQ+H0JnFBI541wbe\n1K6OsUPXSq6w/lhcmMKOUsZ/A8afR29MIiLMmwMQrye+1WfKdOPhI8p2aGvmnTPG\nsFqo9GfTfeMRh2dH3VMjOkXlaOxH9MGwtsrO7veS0lAf8CobZUUFZmYiuZvenjkD\nQ83jv6840rggsBgv3zS61cJDcmCRQnDvX2NkKN02rpNCMUtUir8HojSWoma2xb5i\nmYAwtgSfAgMBAAECggEADOqtSnBWi/pp8nK4nNraIFIUmouRDymYJVOprg+ACy4I\nv+0iXtTfO17Sw4p8g5+JIrBErSaxgKazbd+c6R9WH5DbOBV9rwsKM5tf72dI84IA\nD38zbYxMLy1kNWVFm2zpiUweGKAGcM1x1A4mbj8jx7kMm/B0vmTLnEJbWJH3zHny\n6GYbrMVR8y1tzFrFEZnqB9BVlxXUcj9dybedAFvEBn3WtzGbwayc8K2b+r8em/bd\nKVWTSZwDoFroQmP01Omg/Smm7oh/gYNp514kl/rONOY/g8EJbSkyoyVPCvUo7Z+0\nEHYSdeDe5+W5ZucMfxYszbURSh8NSoXNGR7nTOVfnQKBgQDaeovSSzQAWUw90MS5\nP0T4KN3U0Ys0TOkuX+Hwd5BfxFBUYme+pFCxGftIRmPoXJwj5mn52N7euacrdLHp\nsYE6IuAXoGYsI54qzC17+hYc6LkcHc0YZyi0MB4ArX6gg5vXjuX+B944owOs+fTj\neEeivWpiRJAb2+CtrsdRbqJFZQKBgQDT/l6Dt0ybbem2l+FK4OyKt1W85h49CEcI\ntQlFQlBXTSv3l18/CM24UN34qnAC5Qw6x4kqkFONtyaNgsVUqS1CISHqB5CNlXSi\nfhpD7kCJ/DkWBqG7Wqhvqd1IfY71ciTtCk0NFkuHtGsLW/N7cbzPkJMlbH22FtYI\nMOJN0KUTswKBgQDLZa1IQXUPIhNltTeAUtPNyJYE7HQRY8zuvJsm+NjzH1u9w8Nb\n67OnvU2AUu/uQlGm5nsg/HM4nVRxk3mS3As36YIA3PZh/2Lf6ygpNIFjtpGnCGOJ\nZXiyj91OujaaDwyGGOYron2S8siYQDhpkO/4JSmmhLg5B3HboEy1li8CNQKBgAzo\nEa0HPdzAplf9izPZ2czgOJIVmIWyuVBoZTYYQXfvNNwQFTZrPMsZ8UmwZr1mYIY7\nm7hBrTSVj/1Rlt3+psi956it6TkVflJeRw8XtEoyVu9mW/ZiIJsbxmMhcdCzsFfW\nJrbDQrnyXAoHAR3k4M/qR2sh3c12OnWpND30k/hNAoGAcB7emO16MIewllzJYdj2\nAPl1n84RtxGZ/keFcQTCbDv2+s5TPNvowYEZnnE8/BBD+HUCJqRjwTjGFuakEDRF\nVvhzyQQEMwjKhBwgEuczZcbL+AMFs8Qtb4QrZ72gMmNtDjfB3FuNVPcEYx8HEzf4\naxx+ENCWXDn0sEVfxjQomGE=\n-----END PRIVATE KEY-----\n",
+    "client_email": "firebase-adminsdk-k8o6x@flightbookingsys.iam.gserviceaccount.com",
+    "client_id": "103448118128580664030",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-k8o6x%40flightbookingsys.iam.gserviceaccount.com"
+}
