@@ -54,7 +54,7 @@ class ReportController extends Controller
         } elseif ($report->type == 3) {
             $tokens = FirebaseToken::whereHas("user", function ($q) use ($report) {
                 $q->where("class_id", $report->class_id);
-            });
+            })->get();
             if ($notification_type != "delete") {
                 foreach ($tokens as $token) {
                     $this->send_notification_firebase("تبليغ امتحان", $report->body, $token->token);
@@ -64,7 +64,7 @@ class ReportController extends Controller
         } else {
             $tokens = FirebaseToken::whereHas("user", function ($q) use ($report) {
                 $q->where("class_id", $report->class_id);
-            });
+            })->get();
             if ($notification_type != "delete") {
                 foreach ($tokens as $token) {
                     $this->send_notification_firebase("تبليغ واجب", $report->body, $token->token);
