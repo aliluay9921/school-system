@@ -33,9 +33,11 @@ use Illuminate\Support\Facades\Route;
 
 route::post('login', [AuthController::class, 'login']);
 
+route::get("send_firebase", [NotificationController::class, "sendFirebase"]);
 
 Route::middleware('auth:api')->group(function () {
     Broadcast::routes();
+
 
 
 

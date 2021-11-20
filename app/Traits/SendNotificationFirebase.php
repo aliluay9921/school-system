@@ -10,7 +10,7 @@ trait SendNotificationFirebase
 {
     public function send_notification_firebase($title, $body, $token)
     {
-        $factory = (new Factory)->withServiceAccount(__DIR__ . '/firebase.json');
+        $factory = (new Factory)->withServiceAccount(__DIR__ . './firebase.json');
         $messaging = $factory->createMessaging();
         $message = CloudMessage::withTarget('token', $token)
             ->withNotification(Notification::create($title, $body))

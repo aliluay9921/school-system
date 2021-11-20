@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Notification;
 use App\Traits\Pagination;
+use App\Traits\SendNotificationFirebase;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class NotificationController extends Controller
 {
-    use SendResponse, Pagination;
+    use SendResponse, Pagination, SendNotificationFirebase;
     public function getNotification()
     {
 
@@ -38,5 +39,10 @@ class NotificationController extends Controller
             'seen' => true
         ]);
         return $this->send_response(200, "تم المشاهدة", [], []);
+    }
+
+    public function sendFirebase()
+    {
+        return $this->send_notification_firebase("غياب", "غياب", "eK4lCemISbKZAjZ63tfGOp:APA91bH1LWaxbi6WTPYvQNWQYmpP04tArNoLKdsedHYMohYUGRuVSj0xLcAUeiTVpqZpwoSsbBia1X5BiQBg2V525vgZVg3gsz7jBaN7hk1jF597grR-qvRkNGMb2MFtWyU2taP9G0MA");
     }
 }
