@@ -25,8 +25,10 @@ class ReportController extends Controller
     {
         if ($report->type == 0) {
             $user = User::find($report->user_id);
-            foreach ($user->firebaseTokens as $ObjToken) {
-                $this->send_notification_firebase("تبليغ غياب", $report->body, $ObjToken->token);
+            if ($notification_type != "delete") {
+                foreach ($user->firebaseTokens as $ObjToken) {
+                    return  $this->send_notification_firebase("تبليغ غياب", $report->body, $ObjToken->token);
+                }
             }
             broadcast(new AbsentSockets($report, $user, $notification_type));
         } elseif ($report->type == 1) {
