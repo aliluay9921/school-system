@@ -33,9 +33,9 @@ class ReportController extends Controller
             }
             broadcast(new AbsentSockets($report, $user, $notification_type));
         } elseif ($report->type == 1) {
-            $school_id = auth()->user()->School->id;
-            $tokens = FirebaseToken::whereHas("user", function ($q) {
-                $q->where("school_id", auth()->user()->school->id);
+            $school_id = auth()->user()->school->id;
+            $tokens = FirebaseToken::whereHas("user", function ($q) use ($school_id) {
+                $q->where("school_id", $school_id);
             });
             if ($notification_type != "delete") {
                 foreach ($tokens as $token) {
