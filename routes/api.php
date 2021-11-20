@@ -1,24 +1,25 @@
 <?php
 
+use App\Models\User;
+use App\Models\Notification;
+use App\Models\FirebaseToken;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\DailyMaterialController;
-use App\Http\Controllers\DegreeController;
 use App\Http\Controllers\ExamController;
-use App\Http\Controllers\FeedbackController;
-use App\Http\Controllers\MaterialController;
-use App\Http\Controllers\MaterialStageTeacherController;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\PaymentsController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\StageController;
+use Illuminate\Support\Facades\Broadcast;
+use App\Http\Controllers\DegreeController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\MaterialController;
+use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\SemesterController;
-use App\Http\Controllers\StageController;
-use App\Http\Controllers\UserController;
-use App\Models\Notification;
-use App\Models\User;
-use Illuminate\Support\Facades\Broadcast;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\DailyMaterialController;
+use App\Http\Controllers\MaterialStageTeacherController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,9 +38,10 @@ route::post('login', [AuthController::class, 'login']);
 route::get("send_firebase", [NotificationController::class, "sendFirebase"]);
 route::get("test", function () {
 
-    $user = User::find("bfbb14ea-33f9-4626-8309-4202ac8ccbe3");
-
-    return $user->firebaseTokens[0]->token;
+    $tokens = FirebaseToken::whereHas("user", function ($q) {
+        $q->where("school_id", "50f03bcd-23fa-4553-a44e-e0b425ac0caa");
+    })->get();
+    return $tokens;
 });
 
 Route::middleware('auth:api')->group(function () {

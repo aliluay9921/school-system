@@ -36,7 +36,7 @@ class ReportController extends Controller
             $school_id = auth()->user()->school->id;
             $tokens = FirebaseToken::whereHas("user", function ($q) use ($school_id) {
                 $q->where("school_id", $school_id);
-            });
+            })->get();
             if ($notification_type != "delete") {
                 foreach ($tokens as $token) {
                     $this->send_notification_firebase("تبليغ عام", $report->body, $token->token);
