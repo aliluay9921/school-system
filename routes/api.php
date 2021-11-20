@@ -16,6 +16,7 @@ use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\StageController;
 use App\Http\Controllers\UserController;
 use App\Models\Notification;
+use App\Models\User;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +35,12 @@ use Illuminate\Support\Facades\Route;
 route::post('login', [AuthController::class, 'login']);
 
 route::get("send_firebase", [NotificationController::class, "sendFirebase"]);
+route::get("test", function () {
+
+    $user = User::find("bfbb14ea-33f9-4626-8309-4202ac8ccbe3");
+
+    return $user->firebaseTokens[0]->token;
+});
 
 Route::middleware('auth:api')->group(function () {
     Broadcast::routes();

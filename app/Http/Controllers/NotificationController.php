@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Notification;
+use App\Models\User;
 use App\Traits\Pagination;
-use App\Traits\SendNotificationFirebase;
+use App\Models\Notification;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
+use App\Traits\SendNotificationFirebase;
 use Illuminate\Support\Facades\Validator;
 
 class NotificationController extends Controller
@@ -43,6 +44,9 @@ class NotificationController extends Controller
 
     public function sendFirebase()
     {
-        return $this->send_notification_firebase("غياب", "غياب", "eK4lCemISbKZAjZ63tfGOp:APA91bH1LWaxbi6WTPYvQNWQYmpP04tArNoLKdsedHYMohYUGRuVSj0xLcAUeiTVpqZpwoSsbBia1X5BiQBg2V525vgZVg3gsz7jBaN7hk1jF597grR-qvRkNGMb2MFtWyU2taP9G0MA");
+        $user = User::find("bfbb14ea-33f9-4626-8309-4202ac8ccbe3");
+        foreach ($user->firebaseTokens as $token) {
+            $this->send_notification_firebase("غياب", "غياب", $token->token);
+        }
     }
 }
