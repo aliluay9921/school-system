@@ -15,6 +15,7 @@ use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\StageController;
 use App\Http\Controllers\UserController;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
@@ -35,6 +36,7 @@ route::post('login', [AuthController::class, 'login']);
 
 Route::middleware('auth:api')->group(function () {
     Broadcast::routes();
+
     route::get('get_users', [UserController::class, 'getUsers']);
     route::get('auth_info', [AuthController::class, 'authInfo']);
     route::get('get_material_stage_teacher', [MaterialStageTeacherController::class, 'getMaterialStageTeacher']);
@@ -54,6 +56,7 @@ Route::middleware('auth:api')->group(function () {
     route::post('add_comment', [CommentController::class, 'addComment']);
     route::post('add_report', [ReportController::class, 'addReport']);
 
+    route::put("seen", [NotificationController::class, "seen"]);
 
     route::delete('delete_comment', [CommentController::class, 'deleteComment']);
 

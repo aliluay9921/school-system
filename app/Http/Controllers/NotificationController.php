@@ -6,6 +6,7 @@ use App\Models\Notification;
 use App\Traits\Pagination;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class NotificationController extends Controller
 {
@@ -22,5 +23,20 @@ class NotificationController extends Controller
             $_GET['limit'] = 10;
         $res = $this->paging($notification,  $_GET['skip'],  $_GET['limit']);
         return $this->send_response(200, 'تم جلب الاشعارات بنجاح', [], $res["model"], null, $res["count"]);
+    }
+    public function seen(Request $request)
+    {
+        $request = $request->json()->all();
+        $validator = Validator::make($request, [
+            "notify_id" => 'required|exists:notifications,id'
+        ]);
+        if ($validator->fails()) {
+            return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
+        }
+        $notification = Notification::find($request['notify_id']);
+        $notification->update([
+            'seen' => true
+        ]);
+        return $this->send_response(200, "تم المشاهدة", [], []);
     }
 }
