@@ -44,7 +44,7 @@ class NotificationController extends Controller
 
     public function sendFirebase()
     {
-        $user = User::find("bfbb14ea-33f9-4626-8309-4202ac8ccbe3");
+        $user = User::where("user_name", "mohsen_student")->first();
         foreach ($user->firebaseTokens as $token) {
             $this->send_notification_firebase("غياب", "غياب", $token->token);
         }
