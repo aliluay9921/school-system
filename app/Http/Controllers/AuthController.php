@@ -54,4 +54,25 @@ class AuthController extends Controller
         $firebase->delete();
         return $this->send_response(200, 'تم تسجيل الخروج بنجاح', [], []);
     }
+    public function replaceFirebaseToken(Request $request)
+    {
+        $request = $request->json()->all();
+        $validator = Validator::make($request, [
+            "old_token" => 'required|exists:firebase_tokens,token',
+            "new_token" => 'required'
+        ]);
+        if ($validator->fails()) {
+            return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
+        }
+
+        $firebase = FirebaseToken::where("user_id", auth()->user()->id)->where("token", $request["old_token"])->first();
+        if ($firebase) {
+            $firebase->update([
+                "token" => $request["new_token"]
+            ]);
+            return $this->send_response(200, "تم تحديث التوكن بنجاح", [], []);
+        } else {
+            return $this->send_response(401, "حدث خطأ", [], []);
+        }
+    }
 }

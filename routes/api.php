@@ -50,7 +50,7 @@ Route::middleware('auth:api')->group(function () {
 
 
 
-    route::post("logout", [AuthController::class, "logout"]);
+
     route::get('get_users', [UserController::class, 'getUsers']);
     route::get('auth_info', [AuthController::class, 'authInfo']);
     route::get('get_material_stage_teacher', [MaterialStageTeacherController::class, 'getMaterialStageTeacher']);
@@ -66,10 +66,16 @@ Route::middleware('auth:api')->group(function () {
     route::get('get_daily_materials', [DailyMaterialController::class, 'getDailyMaterials']);
     route::get('get_comments', [CommentController::class, 'getCommtns']);
     route::get("get_notification", [NotificationController::class, "getNotification"]);
+
+
     route::post('add_feedback', [FeedbackController::class, 'addFeedback']);
     route::post('add_comment', [CommentController::class, 'addComment']);
     route::post('add_report', [ReportController::class, 'addReport']);
+    route::post("logout", [AuthController::class, "logout"]);
 
+
+
+    route::put("replace_token_firebase", [AuthController::class, "replaceFirebaseToken"]);
     route::put("seen", [NotificationController::class, "seen"]);
 
     route::delete('delete_comment', [CommentController::class, 'deleteComment']);
