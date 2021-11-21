@@ -8,7 +8,7 @@ use App\Traits\SendResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-
+use Kreait\Laravel\Firebase\Facades\Firebase;
 
 class AuthController extends Controller
 {
@@ -26,13 +26,15 @@ class AuthController extends Controller
         }
         if (Auth::attempt(['user_name' => $request['user_name'], 'password' => $request['password']])) {
             $user = Auth::user();
+
+            $token = $user->createToken($user->user_name)->accessToken;
             if (array_key_exists('token', $request)) {
                 FirebaseToken::Create([
                     "user_id" => $user->id,
-                    "token" => $request['token']
+                    "token" => $request['token'],
+                    "auth_token" => $token
                 ]);
             }
-            $token = $user->createToken($user->user_name)->accessToken;
             return $this->send_response(200, 'تم تسجيل الدخول بنجاح', [], User::with('school', 'stage', 'materials_stages_teachers')->find($user->id), $token);
         } else {
             return $this->send_response(401, 'هناك مشكلة تحقق من تطابق المدخلات', null, null, null);
@@ -42,5 +44,14 @@ class AuthController extends Controller
     public function authInfo(Request $request)
     {
         return $this->send_response(200, 'تم جلب معلومات المستخدم', [], User::with('school', 'stage', 'materials_stages_teachers', 'payments')->find(auth()->user()->id));
+    }
+
+    public function logout(Request $request)
+    {
+        $token = $request->bearerToken();
+        $firebase = FirebaseToken::where("auth_token", $token)->first();
+        auth()->user()->token()->revoke();
+        $firebase->delete();
+        return $this->send_response(200, 'تم تسجيل الخروج بنجاح', [], []);
     }
 }
