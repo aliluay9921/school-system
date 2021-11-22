@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Degree;
+use App\Models\Material_stage_teacher;
 use App\Models\Semester;
+use App\Models\User;
 use App\Traits\Pagination;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
@@ -42,21 +44,12 @@ class DegreeController extends Controller
     {
         $request = $request->json()->all();
         $validator = Validator::make($request, [
-            'material_id' => 'required|exists:materials,id',
             'user_id' => 'required|exists:users,id',
-            'class_id' => 'required|exists:stages,id',
-            'semester_id' => 'required|exists:semesters,id',
-            'degree' => 'required'
+            'certificate' => 'required'
         ], [
-            'material_id.required' => 'يجب ادخال المادة  ',
             'user_id.required' => 'يجب ادخال  الطالب ',
-            'class_id.required' => 'يجب ادخال الصف ',
-            'material_id.exists' => 'يجب ادخال مادة موجودة  ',
             'user_id.exists' => 'يجب ادخال  طالب موجود ',
-            'class_id.exists' => 'يجب ادخال صف موجود ',
-            'semester_id.required' => 'يجب ادخال الفصل الدراسي',
-            'semester_id.exists' => 'يجب ادخال فصل دراسي صحيح',
-            'degree.required' => 'يجب ادخال الدرجة',
+            'certificate.required' => 'يجب ادخال الدرجة',
 
         ]);
         if ($validator->fails()) {
@@ -66,14 +59,30 @@ class DegreeController extends Controller
         if ($semester->max_degree < $request['degree']) {
             return $this->send_response(401, 'يجب ادخال درجة مناسبة للفصل الدراسي', [], []);
         }
-        $degree = Degree::create([
-            'material_id' => $request['material_id'],
-            'user_id' => $request['user_id'],
-            'class_id' => $request['class_id'],
-            'semester_id' => $request['semester_id'],
-            'degree' => $request['degree'],
-            'school_id' => auth()->user()->school->id,
-        ]);
+        $user = User::find($request['user_id']);
+
+
+        $materials = Material_stage_teacher::select('material_id', 'class_id')->where("class_id", $user->class_id)->get();
+        $semesters = Semester::where("class_id", $user->class_id)->get();
+        for ($i = 0; $i <= count($request['certificate']); $i++) {
+            $current_material = $materials[$i];
+            for ($j = 0; $j <= count($request['certificate'][$i]); $j++) {
+                $current_semester = $semesters[$j];
+                $current_degree = $request['certificate'][$i][$j];
+                $degree = Degree::create([
+                    'material_id' => $current_material->id,
+                    'user_id' => $request['user_id'],
+                    'class_id' =>  $user->class_id,
+                    'semester_id' => $current_semester->id,
+                    'degree' => $current_degree,
+                    'school_id' => auth()->user()->school->id,
+                ]);
+            }
+        }
+
+
+
+
         return $this->send_response(200, 'تم اضافة الدرجة بنجاح', [], Degree::with('material', 'semester', 'user', 'stage')->find($degree->id));
     }
 }
