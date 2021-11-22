@@ -28,7 +28,6 @@ class SchoolController extends Controller
         $school = School::create([
             'name' => $request['name'],
             'address' => $request['address'],
-            'student_number' => $request['student_number'],
         ]);
         return $this->send_response(200, 'تم اضافة مدرسة جديدة', [], School::find($school->id));
     }

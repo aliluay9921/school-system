@@ -17,7 +17,6 @@ class CreateSchoolsTable extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('address');
-            $table->double('student_number');
 
             $table->timestamps();
         });
