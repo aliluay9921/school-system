@@ -119,6 +119,8 @@ class ReportController extends Controller
                         $q->Where('full_name', 'LIKE', '%' . $_GET['query'] . '%');
                     })->orWhereHas('stage', function ($q) {
                         $q->Where('name', 'LIKE', '%' . $_GET['query'] . '%');
+                    })->orWhereHas('material', function ($q) {
+                        $q->Where('name', 'LIKE', '%' . $_GET['query'] . '%');
                     });
                     foreach ($columns as $column) {
                         $q->orWhere($column, 'LIKE', '%' . $_GET['query'] . '%');
