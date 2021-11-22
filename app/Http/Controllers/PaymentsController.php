@@ -25,6 +25,9 @@ class PaymentsController extends Controller
         }
         if (isset($_GET['query'])) {
             $columns = Schema::getColumnListing('payments');
+            $payments->whereHas("user", function ($q) {
+                $q->where('full_name', 'LIKE', '%' . $_GET['query'] . '%');
+            });
             foreach ($columns as $column) {
                 $payments->orWhere($column, 'LIKE', '%' . $_GET['query'] . '%');
             }
