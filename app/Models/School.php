@@ -10,4 +10,9 @@ class School extends Model
 {
     use HasFactory, Uuids;
     protected $guarded = [];
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'user_id');
+    }
 }

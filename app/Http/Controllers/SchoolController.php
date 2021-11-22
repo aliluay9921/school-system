@@ -13,7 +13,7 @@ class SchoolController extends Controller
 
     public function getSchool()
     {
-        $schools = School::select('*');
+        $schools = School::select('*')->withCount("users");
 
         if (!isset($_GET['skip']))
             $_GET['skip'] = 0;
