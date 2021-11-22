@@ -13,6 +13,6 @@ class School extends Model
 
     public function users()
     {
-        return $this->hasMany(User::class, 'user_id');
+        return $this->hasMany(User::class, 'school_id');
     }
 }
