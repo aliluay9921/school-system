@@ -103,7 +103,7 @@ class CommentController extends Controller
                 $notify->users()->attach($user);
                 broadcast(new AuthNotification($notify, $user, "comment"));
                 foreach ($user->firebaseTokens as $token) {
-                    $this->send_notification_firebase("تم اضافة رد على تعليقك", $request['body'], $token);
+                    $this->send_notification_firebase("تم اضافة رد على تعليقك", $request['body'], $token->token);
                 }
             }
         } else {
@@ -121,7 +121,7 @@ class CommentController extends Controller
                 $notify->users()->attach($user);
                 broadcast(new AuthNotification($notify, $user, "comment"));
                 foreach ($user->firebaseTokens as $token) {
-                    $this->send_notification_firebase("تم اضافة تعليق على تبليغ خاص بك", $request['body'], $token);
+                    $this->send_notification_firebase("تم اضافة تعليق على تبليغ خاص بك", $request['body'], $token->token);
                 }
             }
         }
