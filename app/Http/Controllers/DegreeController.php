@@ -64,9 +64,9 @@ class DegreeController extends Controller
 
         $materials = Material_stage_teacher::select('material_id', 'class_id')->where("class_id", $user->class_id)->get();
         $semesters = Semester::where("class_id", $user->class_id)->get();
-        for ($i = 0; $i <= count($request['certificate']); $i++) {
+        for ($i = 0; $i < count($request['certificate']); $i++) {
             $current_material = $materials[$i];
-            for ($j = 0; $j <= count($request['certificate'][$i]); $j++) {
+            for ($j = 0; $j < count($request['certificate'][$i]); $j++) {
                 $current_semester = $semesters[$j];
                 $current_degree = $request['certificate'][$i][$j];
                 $degree = Degree::create([
