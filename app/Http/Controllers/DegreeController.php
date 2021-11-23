@@ -70,7 +70,7 @@ class DegreeController extends Controller
                 $current_semester = $semesters[$j];
                 $current_degree = $request['certificate'][$i][$j];
                 $degree = Degree::create([
-                    'material_id' => $current_material->id,
+                    'material_id' => $current_material->material_id,
                     'user_id' => $request['user_id'],
                     'class_id' =>  $user->class_id,
                     'semester_id' => $current_semester->id,
