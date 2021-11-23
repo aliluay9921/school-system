@@ -27,7 +27,7 @@ class MaterialController extends Controller
         if (isset($_GET['filter'])) {
             $materials->whereHas("materials_stages_teachers", function ($q) {
                 $filter = json_decode($_GET['filter']);
-                $q->where("class_id", $filter->value);
+                $q->whereIn($filter->name, $filter->value);
             });
             // $filter = json_decode($_GET['filter']);
             // $materials->whereIn($filter->name, $filter->value);
