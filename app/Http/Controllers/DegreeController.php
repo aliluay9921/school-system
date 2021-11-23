@@ -30,7 +30,7 @@ class DegreeController extends Controller
         }
         if (isset($_GET)) {
             foreach ($_GET as $key => $value) {
-                if ($key == 'skip' || $key == 'limit') {
+                if ($key == 'skip' || $key == 'limit' || $key == 'filter') {
                     continue;
                 } else {
                     $degrees->where($key, $value);
