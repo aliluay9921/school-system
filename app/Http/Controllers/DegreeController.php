@@ -78,8 +78,8 @@ class DegreeController extends Controller
                 )->where(
                     'class_id',
                     $user->class_id
-                )->first();
-                if ($degree == null) {
+                );
+                if ($degree->first() == null) {
                     $degree = Degree::create([
                         'material_id' => $current_material->material_id,
                         'user_id' => $request['user_id'],
