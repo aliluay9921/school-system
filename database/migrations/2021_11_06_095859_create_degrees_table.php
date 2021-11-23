@@ -19,7 +19,7 @@ class CreateDegreesTable extends Migration
             $table->uuid('material_id');
             $table->uuid('class_id');
             $table->uuid('semester_id');
-            $table->double('degree');
+            $table->double('degree')->nullable();
             $table->boolean('active')->default(true);
             $table->uuid('school_id');
 

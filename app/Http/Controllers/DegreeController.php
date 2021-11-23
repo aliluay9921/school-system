@@ -74,6 +74,9 @@ class DegreeController extends Controller
             $current_material = $materials[$i];
             for ($j = 0; $j < count($request['certificate'][$i]); $j++) {
                 $current_semester = $semesters[$j];
+                if ($current_semester->max_degree < $request['certificate'][$i][$j]) {
+                    return $this->send_response(401, 'يجب ادخال درجة أقل او تساوي  ' . $current_semester->max_degree, [], []);
+                }
                 $current_degree = $request['certificate'][$i][$j];
                 $degree = Degree::where(
                     'material_id',
