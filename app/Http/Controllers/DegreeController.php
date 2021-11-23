@@ -79,6 +79,6 @@ class DegreeController extends Controller
                 ]);
             }
         }
-        return $this->send_response(200, 'تم اضافة الدرجة بنجاح', [], Degree::with('material', 'semester', 'user', 'stage')->find($degree->id));
+        return $this->send_response(200, 'تم اضافة الدرجة بنجاح', [], []);
     }
 }

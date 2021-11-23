@@ -6,6 +6,7 @@ use App\Models\Material;
 use App\Traits\Pagination;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 
 class MaterialController extends Controller
@@ -15,6 +16,32 @@ class MaterialController extends Controller
     public function getMaterials()
     {
         $materials = Material::where('school_id', auth()->user()->school->id);
+        if (isset($_GET['query'])) {
+            $materials->where(function ($q) {
+                $columns = Schema::getColumnListing('materials');
+                foreach ($columns as $column) {
+                    $q->orWhere($column, 'LIKE', '%' . $_GET['query'] . '%');
+                }
+            });
+        }
+        if (isset($_GET['filter'])) {
+            $materials->whereHas("materials_stages_teachers", function ($q) {
+                $filter = json_decode($_GET['filter']);
+                $q->where("class_id", $filter->value);
+            });
+            // $filter = json_decode($_GET['filter']);
+            // $materials->whereIn($filter->name, $filter->value);
+        }
+        if (isset($_GET)) {
+            foreach ($_GET as $key => $value) {
+                if ($key == 'skip' || $key == 'limit' || $key == 'query' || $key == 'filter') {
+                    continue;
+                } else {
+                    $sort = $value == 'true' ? 'desc' : 'asc';
+                    $materials->orderBy($key,  $sort);
+                }
+            }
+        }
         if (!isset($_GET['skip']))
             $_GET['skip'] = 0;
         if (!isset($_GET['limit']))
