@@ -55,10 +55,10 @@ class DegreeController extends Controller
         if ($validator->fails()) {
             return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
         }
-        $semester = Semester::find($request['semester_id']);
-        if ($semester->max_degree < $request['degree']) {
-            return $this->send_response(401, 'يجب ادخال درجة مناسبة للفصل الدراسي', [], []);
-        }
+        // $semester = Semester::find($request['semester_id']);
+        // if ($semester->max_degree < $request['degree']) {
+        //     return $this->send_response(401, 'يجب ادخال درجة مناسبة للفصل الدراسي', [], []);
+        // }
         $user = User::find($request['user_id']);
 
 
