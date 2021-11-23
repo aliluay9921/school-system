@@ -69,14 +69,28 @@ class DegreeController extends Controller
             for ($j = 0; $j < count($request['certificate'][$i]); $j++) {
                 $current_semester = $semesters[$j];
                 $current_degree = $request['certificate'][$i][$j];
-                $degree = Degree::create([
-                    'material_id' => $current_material->material_id,
-                    'user_id' => $request['user_id'],
-                    'class_id' =>  $user->class_id,
-                    'semester_id' => $current_semester->id,
-                    'degree' => $current_degree,
-                    'school_id' => auth()->user()->school->id,
-                ]);
+                $degree = Degree::where(
+                    'material_id',
+                    $current_material->material_id
+                )->where(
+                    'user_id',
+                    $request['user_id']
+                )->where(
+                    'class_id',
+                    $user->class_id
+                )->first();
+                if ($degree == null) {
+                    $degree = Degree::create([
+                        'material_id' => $current_material->material_id,
+                        'user_id' => $request['user_id'],
+                        'class_id' =>  $user->class_id,
+                        'semester_id' => $current_semester->id,
+                        'degree' => $current_degree,
+                        'school_id' => auth()->user()->school->id,
+                    ]);
+                } else {
+                    $degree->update(["degree" => $current_degree]);
+                }
             }
         }
         return $this->send_response(200, 'تم اضافة الدرجة بنجاح', [], []);
