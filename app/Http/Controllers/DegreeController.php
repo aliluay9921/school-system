@@ -75,11 +75,12 @@ class DegreeController extends Controller
                 )->where(
                     'user_id',
                     $request['user_id']
-                )->where(
+                )->where("semester_id", $current_semester->id)->where(
                     'class_id',
                     $user->class_id
-                );
-                if ($degree->first() == null) {
+                )->first();
+                error_log($degree->id);
+                if ($degree == null) {
                     $degree = Degree::create([
                         'material_id' => $current_material->material_id,
                         'user_id' => $request['user_id'],
