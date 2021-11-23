@@ -17,10 +17,16 @@ class DegreeController extends Controller
 
     public function getDegrees()
     {
-        if (auth()->user()->user_type == 3) {
+        if (auth()->user()->user_type == 3) {  //student
             $degrees = Degree::with('material', 'stage', 'semester', 'user')->where('school_id', auth()->user()->school->id)->where('user_id', auth()->user()->id);
         } else {
+            //front
             $degrees = Degree::with('material', 'stage', 'semester', 'user')->where('school_id', auth()->user()->school->id);
+            if (isset($_GET['filter'])) {
+                $filter = json_decode($_GET['filter']);
+                $degrees->whereIn($filter->name, $filter->value); // array
+            }
+            return $this->send_response(200, 'تم جلب الدرجات بنجاح', [], $degrees->get(), null, 1);
         }
         if (isset($_GET)) {
             foreach ($_GET as $key => $value) {
@@ -34,7 +40,7 @@ class DegreeController extends Controller
         if (!isset($_GET['skip']))
             $_GET['skip'] = 0;
         if (!isset($_GET['limit']))
-            $_GET['limit'] = 10;
+            $_GET['limit'] = 90;
         $res = $this->paging($degrees,  $_GET['skip'],  $_GET['limit']);
         return $this->send_response(200, 'تم جلب الدرجات بنجاح', [], $res["model"], null, $res["count"]);
     }
