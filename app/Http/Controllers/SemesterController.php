@@ -6,6 +6,7 @@ use App\Models\Semester;
 use App\Traits\Pagination;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -17,6 +18,31 @@ class SemesterController extends Controller
     public function getSemesters()
     {
         $semester = Semester::with("stage")->where('school_id', auth()->user()->School->id);
+        if (isset($_GET['query'])) {
+            $semester->where(function ($q) {
+                $columns = Schema::getColumnListing('semester');
+                $q->whereHas('stage', function ($q) {
+                    $q->Where('name', 'LIKE', '%' . $_GET['query'] . '%');
+                });
+                foreach ($columns as $column) {
+                    $q->orWhere($column, 'LIKE', '%' . $_GET['query'] . '%');
+                }
+            });
+        }
+        if (isset($_GET['filter'])) {
+            $filter = json_decode($_GET['filter']);
+            $semester->whereIn($filter->name, $filter->value);
+        }
+        if (isset($_GET)) {
+            foreach ($_GET as $key => $value) {
+                if ($key == 'skip' || $key == 'limit' || $key == 'query' || $key == 'filter') {
+                    continue;
+                } else {
+                    $sort = $value == 'true' ? 'desc' : 'asc';
+                    $semester->orderBy($key,  $sort);
+                }
+            }
+        }
 
         if (!isset($_GET['skip']))
             $_GET['skip'] = 0;
