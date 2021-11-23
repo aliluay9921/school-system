@@ -79,8 +79,10 @@ class DegreeController extends Controller
                     'class_id',
                     $user->class_id
                 )->first();
-                error_log($degree->id);
-                if ($degree == null) {
+
+                if ($degree) {
+                    $degree->update(["degree" => $current_degree]);
+                } else {
                     $degree = Degree::create([
                         'material_id' => $current_material->material_id,
                         'user_id' => $request['user_id'],
@@ -89,8 +91,6 @@ class DegreeController extends Controller
                         'degree' => $current_degree,
                         'school_id' => auth()->user()->school->id,
                     ]);
-                } else {
-                    $degree->update(["degree" => $current_degree]);
                 }
             }
         }
