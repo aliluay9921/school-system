@@ -122,6 +122,6 @@ class DegreeController extends Controller
 
         $user = User::find($request["user_id"]);
         $user->update(["hide_degree" => !$user->hide_degree]);
-        return $this->send_response(200, "تم اخفاء النتيجة بنجاح", [], $user);
+        return $this->send_response(200, "تم اخفاء النتيجة بنجاح", [], User::find($user->id));
     }
 }
