@@ -20,6 +20,7 @@ use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\DailyMaterialController;
 use App\Http\Controllers\MaterialStageTeacherController;
+use App\Models\Degree;
 
 /*
 |--------------------------------------------------------------------------
@@ -99,6 +100,7 @@ Route::middleware('auth:api')->group(function () {
 
         route::put("edit_daily_material", [DailyMaterialController::class, "editDailyMaterial"]);
         route::put("edit_exam", [ExamController::class, "editExam"]);
+        route::put("hide_degree", [DegreeController::class, "hideDegree"]);
 
         route::delete('delete_user', [UserController::class, 'deleteUser']);
         route::delete('delete_daily_material', [DailyMaterialController::class, 'deleteDailyMaterial']);

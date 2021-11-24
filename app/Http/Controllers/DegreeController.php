@@ -18,7 +18,11 @@ class DegreeController extends Controller
     public function getDegrees()
     {
         if (auth()->user()->user_type == 3) {  //student
-            $degrees = Degree::with('material', 'stage', 'semester', 'user')->where('school_id', auth()->user()->school->id)->where('user_id', auth()->user()->id);
+            if (auth()->user()->hide_degree == true) {
+                return $this->send_response(500, "يجب عليك تسديد القسط اولاً", [], []);
+            } else {
+                $degrees = Degree::with('material', 'stage', 'semester', 'user')->where('school_id', auth()->user()->school->id)->where('user_id', auth()->user()->id);
+            }
         } else {
             //front
             $degrees = Degree::with('material', 'stage', 'semester', 'user')->where('school_id', auth()->user()->school->id);
@@ -104,5 +108,20 @@ class DegreeController extends Controller
             }
         }
         return $this->send_response(200, 'تم اضافة الدرجة بنجاح', [], []);
+    }
+
+    public function hideDegree(Request $request)
+    {
+        $request = $request->json()->all();
+        $validator = Validator::make($request, [
+            "user_id" => "required|exists:users,id"
+        ]);
+        if ($validator->fails()) {
+            return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
+        }
+
+        $user = User::find($request["user_id"]);
+        $user->update(["hide_degree" => !$user->hide_degree]);
+        return $this->send_response(200, "تم اخفاء النتيجة بنجاح", [], $user);
     }
 }
