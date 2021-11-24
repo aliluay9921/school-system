@@ -23,5 +23,7 @@ class AdminMiddleware
         } else {
             return $this->send_response(401, 'غير مصرح لك بالدخول', [], []);
         }
+        // Response::deny('غير مصرح لك بالدخول الى هنا');
+
     }
 }
