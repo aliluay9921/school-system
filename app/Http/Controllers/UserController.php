@@ -68,7 +68,7 @@ class UserController extends Controller
             'gender' => 'required',
             'class_id' => $request['user_type'] == 3 ? 'required|exists:stages,id' : "",
             'user_type' => 'required',
-            'school_id' => $request['user_type'] == 1 ? 'required|exists:school,id' : "",
+            'school_id' => $request['user_type'] == 1 ? 'required|exists:schools,id' : "",
         ], [
             'user_name.required' => 'يجب ادخال اسم المستخدم',
             'user_name.unique' => 'اسم المستخدم موجود سابقاً',
