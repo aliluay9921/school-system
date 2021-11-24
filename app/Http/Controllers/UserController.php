@@ -68,6 +68,7 @@ class UserController extends Controller
             'gender' => 'required',
             'class_id' => $request['user_type'] == 3 ? 'required|exists:stages,id' : "",
             'user_type' => 'required',
+            'school_id' => $request['user_type'] == 1 ? 'required|exists:school,id' : "",
         ], [
             'user_name.required' => 'يجب ادخال اسم المستخدم',
             'user_name.unique' => 'اسم المستخدم موجود سابقاً',
@@ -86,7 +87,6 @@ class UserController extends Controller
         }
         $data = [];
         $data = [
-            'school_id' => auth()->user()->School->id,
             'full_name' => $request['full_name'],
             'user_name' => $request['user_name'],
             'password' => bcrypt($request['password']),
@@ -95,6 +95,9 @@ class UserController extends Controller
         ];
         if (array_key_exists('address', $request)) {
             $data['address'] = $request['address'];
+        }
+        if (array_key_exists('school_id', $request)) {
+            $data['school_id'] = $request['school_id'];
         }
         if (array_key_exists('phone_number', $request)) {
             $data['phone_number'] = $request['phone_number'];
