@@ -85,7 +85,7 @@ Route::middleware('auth:api')->group(function () {
         route::post('add_school', [SchoolController::class, 'add_school']);
     });
     route::middleware('manager')->group(function () {
-
+        route::get("staticstics", [UserController::class, "staticstics"]);
         route::post("show_pass", [UserController::class, 'showPass']);
 
         route::post('add_user', [UserController::class, 'addUser']);

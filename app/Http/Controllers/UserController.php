@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\InfoUser;
+use App\Models\Material;
+use App\Models\Stage;
 use App\Models\User;
 use App\Traits\Pagination;
 use App\Traits\SendResponse;
@@ -143,5 +145,17 @@ class UserController extends Controller
         $request = $request->json()->all();
         $get = InfoUser::where('user_id', $request['user_id'])->get();
         return $this->send_response(200, 'تم نجاح العملية', [], $get);
+    }
+
+    public function staticstics()
+    {
+
+        $staticstics = [];
+
+        $staticstics['students'] = User::where("school_id", auth()->user()->school_id)->where("user_type", 3)->count();
+        $staticstics['teachers'] = User::where("school_id", auth()->user()->school_id)->where("user_type", 2)->count();
+        $staticstics['materials'] = Material::where("school_id", auth()->user()->school_id)->count();
+        $staticstics['stages'] = Stage::where("school_id", auth()->user()->school_id)->count();
+        return $this->send_response(200, "staticstics", [], $staticstics);
     }
 }
