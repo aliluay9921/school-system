@@ -19,6 +19,15 @@ class StageController extends Controller
             return $this->send_response(200, 'تم جلب معلومات الصف ', [], $stage);
         }
         $stages = Stage::with('semesters')->where("school_id", auth()->user()->school_id)->withCount('users');
+        if (isset($_GET)) {
+            foreach ($_GET as $key => $value) {
+                if ($key == 'skip' || $key == 'limit') {
+                    continue;
+                } else {
+                    $stages->where($key, $value);
+                }
+            }
+        }
         if (!isset($_GET['skip']))
             $_GET['skip'] = 0;
         if (!isset($_GET['limit']))
