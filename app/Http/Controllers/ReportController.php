@@ -42,7 +42,7 @@ class ReportController extends Controller
             $tokens = FirebaseToken::whereHas("user", function ($q) use ($school_id) {
                 $q->where("school_id", $school_id);
             })->get();
-            if ($notification_type != "delete") {
+            if ($notification_type == "add") {
                 foreach ($tokens as $token) {
                     try {
                         $this->send_notification_firebase("تبليغ عام", $report->body, $token->token);
@@ -54,7 +54,7 @@ class ReportController extends Controller
             broadcast(new ReportGeneralSockets($report, $school_id, $notification_type));
         } elseif ($report->type == 2) {
             $user = User::find($report->user_id);
-            if ($notification_type != "delete") {
+            if ($notification_type == "add") {
                 foreach ($user->firebaseTokens as $token) {
                     try {
                         $this->send_notification_firebase("تبليغ خاص", $report->body, $token->token);
@@ -68,7 +68,7 @@ class ReportController extends Controller
             $tokens = FirebaseToken::whereHas("user", function ($q) use ($report) {
                 $q->where("class_id", $report->class_id);
             })->get();
-            if ($notification_type != "delete") {
+            if ($notification_type == "add") {
                 foreach ($tokens as $token) {
                     try {
                         $this->send_notification_firebase("تبليغ امتحان", $report->body, $token->token);
@@ -82,7 +82,7 @@ class ReportController extends Controller
             $tokens = FirebaseToken::whereHas("user", function ($q) use ($report) {
                 $q->where("class_id", $report->class_id);
             })->get();
-            if ($notification_type != "delete") {
+            if ($notification_type == "add") {
                 foreach ($tokens as $token) {
                     try {
                         $this->send_notification_firebase("تبليغ واجب", $report->body, $token->token);
