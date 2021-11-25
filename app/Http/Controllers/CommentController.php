@@ -15,6 +15,7 @@ use App\Events\CommentSocket;
 use App\Traits\SendNotificationFirebase;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
+use Exception;
 
 class CommentController extends Controller
 {
@@ -103,7 +104,11 @@ class CommentController extends Controller
                 $notify->users()->attach($user);
                 broadcast(new AuthNotification($notify, $user, "comment"));
                 foreach ($user->firebaseTokens as $token) {
-                    $this->send_notification_firebase("تم اضافة رد على تعليقك", $request['body'], $token->token);
+                    try {
+                        $this->send_notification_firebase("تم اضافة رد على تعليقك", $request['body'], $token->token);
+                    } catch (Exception $th) {
+                        $token->delete();
+                    }
                 }
             }
         } else {
@@ -121,7 +126,11 @@ class CommentController extends Controller
                 $notify->users()->attach($user);
                 broadcast(new AuthNotification($notify, $user, "comment"));
                 foreach ($user->firebaseTokens as $token) {
-                    $this->send_notification_firebase("تم اضافة تعليق على تبليغ خاص بك", $request['body'], $token->token);
+                    try {
+                        $this->send_notification_firebase("تم اضافة تعليق على تبليغ خاص بك", $request['body'], $token->token);
+                    } catch (Exception $th) {
+                        $token->delete();
+                    }
                 }
             }
         }
