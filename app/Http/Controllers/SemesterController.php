@@ -17,7 +17,7 @@ class SemesterController extends Controller
     use SendResponse, Pagination;
     public function getSemesters()
     {
-        $semester = Semester::with("stage")->where('school_id', auth()->user()->School->id);
+        $semester = Semester::with("stage")->where('school_id', auth()->user()->School_id);
         if (isset($_GET['query'])) {
             $semester->where(function ($q) {
                 $columns = Schema::getColumnListing('semesters');
@@ -48,7 +48,7 @@ class SemesterController extends Controller
             $_GET['skip'] = 0;
         if (!isset($_GET['limit']))
             $_GET['limit'] = 10;
-        $res = $this->paging($semester->orderBy("created_at", "DESC"),  $_GET['skip'],  $_GET['limit']);
+        $res = $this->paging($semester,  $_GET['skip'],  $_GET['limit']);
         return $this->send_response(200, 'تم جلب المستخدمين بنجاح', [], $res["model"], null, $res["count"]);
     }
     public function addSemester(Request $request)
