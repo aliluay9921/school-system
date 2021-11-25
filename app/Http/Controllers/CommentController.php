@@ -159,7 +159,7 @@ class CommentController extends Controller
         $comment =  Comment::find($request['comment_id']);
         broadcast(new CommentSocket($comment, $comment->report, "delete"));
         foreach ($comment->notifications as $notify) {
-            broadcast(new AuthNotification($notify, $comment->user_id, "delete"));
+            broadcast(new AuthNotification($notify, $notify->users[0]->id, "delete"));
         }
 
 
