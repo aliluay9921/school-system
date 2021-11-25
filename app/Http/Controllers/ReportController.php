@@ -27,7 +27,7 @@ class ReportController extends Controller
     {
         if ($report->type == 0) {
             $user = User::find($report->user_id);
-            broadcast(new AbsentSockets($report, $user, $notification_type));
+            broadcast(new AbsentSockets($report, $report->user_id, $notification_type));
 
             if ($notification_type == "add") {
                 foreach ($user->firebaseTokens as $token) {

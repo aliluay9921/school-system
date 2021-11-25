@@ -23,12 +23,12 @@ class AbsentSockets implements ShouldBroadcast
      */
 
     public $report;
-    public $user;
+    public $user_id;
     public $type;
-    public function __construct($report, $user, $type)
+    public function __construct($report, $user_id, $type)
     {
         $this->report = $report;
-        $this->user = $user;
+        $this->user_id = $user_id;
         $this->type = $type;
     }
 
@@ -39,7 +39,7 @@ class AbsentSockets implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        $id = $this->user->id;
+        $id = $this->user_id;
         return new PrivateChannel('absent_report.' . $id);
     }
 }
