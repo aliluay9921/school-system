@@ -64,7 +64,7 @@ class DailyMaterialController extends Controller
             'school_id' => auth()->user()->school->id,
 
         ]);
-        return $this->send_response(200, 'تم اضافة جدول يومي', [], DailyMaterial::find($daily_materials->id));
+        return $this->send_response(200, 'تم اضافة جدول يومي', [], DailyMaterial::with('stage')->find($daily_materials->id));
     }
 
     public function editDailyMaterial(Request $request)
@@ -103,7 +103,7 @@ class DailyMaterialController extends Controller
         // foreach ($users as $user) {
         //     $notify->users()->attach($user);
         // }
-        return $this->send_response(200, "تم التعديل على الجدول", [], DailyMaterial::find($request['daily_material_id']));
+        return $this->send_response(200, "تم التعديل على الجدول", [], DailyMaterial::with('stage')->find($request['daily_material_id']));
     }
 
     public function deleteDailyMaterial(Request $request)
