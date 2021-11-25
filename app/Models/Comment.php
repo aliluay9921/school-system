@@ -34,4 +34,9 @@ class Comment extends Model
     {
         return $this->belongsTo(School::class, 'school_id');
     }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'target_id');
+    }
 }

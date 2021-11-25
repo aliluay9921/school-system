@@ -102,7 +102,7 @@ class CommentController extends Controller
                     "school_id" => auth()->user()->school->id
                 ]);
                 $notify->users()->attach($user);
-                broadcast(new AuthNotification($notify, $user, "comment"));
+                broadcast(new AuthNotification($notify, $re_comment->user_id, "add"));
                 foreach ($user->firebaseTokens as $token) {
                     try {
                         $this->send_notification_firebase("تم اضافة رد على تعليقك", $request['body'], $token->token);
@@ -124,7 +124,7 @@ class CommentController extends Controller
                     "school_id" => auth()->user()->school->id
                 ]);
                 $notify->users()->attach($user);
-                broadcast(new AuthNotification($notify, $user, "comment"));
+                broadcast(new AuthNotification($notify, $report->issuer_id, "add"));
                 foreach ($user->firebaseTokens as $token) {
                     try {
                         $this->send_notification_firebase("تم اضافة تعليق على تبليغ خاص بك", $request['body'], $token->token);
@@ -158,6 +158,9 @@ class CommentController extends Controller
 
         $comment =  Comment::find($request['comment_id']);
         broadcast(new CommentSocket($comment, $comment->report, "delete"));
+        Notification::where("target_id", $comment->id)->get();
+        broadcast(new AuthNotification($comment->notification, $comment->user_id, "delete"));
+
 
         if ($comment->user_id == auth()->user()->id || auth()->user()->user_type == 1) {
             $comment->delete();

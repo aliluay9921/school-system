@@ -2,14 +2,16 @@
 
 namespace App\Providers;
 
-use App\Models\Report;
 use App\Models\User;
-use App\Observers\ReportObserve;
+use App\Models\Report;
+use App\Models\Comment;
 use App\Observers\UserObserver;
+use App\Observers\ReportObserve;
+use App\Observers\CommentObserver;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -33,5 +35,6 @@ class EventServiceProvider extends ServiceProvider
     {
         User::observe(UserObserver::class);
         Report::observe(ReportObserve::class);
+        Comment::observe(CommentObserver::class);
     }
 }

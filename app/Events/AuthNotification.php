@@ -21,13 +21,13 @@ class AuthNotification implements ShouldBroadcast
      */
 
     public $notify;
-    public $user;
+    public $user_id;
     public $type;
 
-    public function __construct($notify, $user, $type)
+    public function __construct($notify, $user_id, $type)
     {
         $this->notify = $notify;
-        $this->user = $user;
+        $this->user_id = $user_id;
         $this->type = $type;
     }
 
@@ -38,7 +38,7 @@ class AuthNotification implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        $id = $this->user->id;
+        $id = $this->user_id;
         return new PrivateChannel('user_notification.' . $id);
     }
 }
