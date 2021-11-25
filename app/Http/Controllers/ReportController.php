@@ -27,6 +27,8 @@ class ReportController extends Controller
     {
         if ($report->type == 0) {
             $user = User::find($report->user_id);
+            broadcast(new AbsentSockets($report, $user, $notification_type));
+
             if ($notification_type != "delete") {
                 foreach ($user->firebaseTokens as $token) {
                     try {
@@ -36,12 +38,13 @@ class ReportController extends Controller
                     }
                 }
             }
-            broadcast(new AbsentSockets($report, $user, $notification_type));
         } elseif ($report->type == 1) {
             $school_id = auth()->user()->school->id;
             $tokens = FirebaseToken::whereHas("user", function ($q) use ($school_id) {
                 $q->where("school_id", $school_id);
             })->get();
+            broadcast(new ReportGeneralSockets($report, $school_id, $notification_type));
+
             if ($notification_type == "add") {
                 foreach ($tokens as $token) {
                     try {
@@ -51,9 +54,10 @@ class ReportController extends Controller
                     }
                 }
             }
-            broadcast(new ReportGeneralSockets($report, $school_id, $notification_type));
         } elseif ($report->type == 2) {
             $user = User::find($report->user_id);
+            broadcast(new AbsentSockets($report, $user, $notification_type));
+
             if ($notification_type == "add") {
                 foreach ($user->firebaseTokens as $token) {
                     try {
@@ -63,11 +67,12 @@ class ReportController extends Controller
                     }
                 }
             }
-            broadcast(new AbsentSockets($report, $user, $notification_type));
         } elseif ($report->type == 3) {
             $tokens = FirebaseToken::whereHas("user", function ($q) use ($report) {
                 $q->where("class_id", $report->class_id);
             })->get();
+            broadcast(new ReportClassSockets($report, $report->class_id, $notification_type));
+
             if ($notification_type == "add") {
                 foreach ($tokens as $token) {
                     try {
@@ -77,11 +82,12 @@ class ReportController extends Controller
                     }
                 }
             }
-            broadcast(new ReportClassSockets($report, $report->class_id, $notification_type));
         } else {
             $tokens = FirebaseToken::whereHas("user", function ($q) use ($report) {
                 $q->where("class_id", $report->class_id);
             })->get();
+            broadcast(new ReportClassSockets($report, $report->class_id, $notification_type));
+
             if ($notification_type == "add") {
                 foreach ($tokens as $token) {
                     try {
@@ -91,7 +97,6 @@ class ReportController extends Controller
                     }
                 }
             }
-            broadcast(new ReportClassSockets($report, $report->class_id, $notification_type));
         }
     }
 
