@@ -20,7 +20,7 @@ class SemesterController extends Controller
         $semester = Semester::with("stage")->where('school_id', auth()->user()->School->id);
         if (isset($_GET['query'])) {
             $semester->where(function ($q) {
-                $columns = Schema::getColumnListing('semester');
+                $columns = Schema::getColumnListing('semesters');
                 $q->whereHas('stage', function ($q) {
                     $q->Where('name', 'LIKE', '%' . $_GET['query'] . '%');
                 });

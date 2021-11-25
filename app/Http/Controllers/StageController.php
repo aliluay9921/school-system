@@ -50,7 +50,7 @@ class StageController extends Controller
     {
         $request = $request->json()->all();
         $validator = Validator::make($request, [
-            'name' => 'required|unique:stages,name',
+            'name' => 'required',
             'fee' => 'required',
         ], [
             'name.required' => 'يجب ادخال اسم الصصف ',
