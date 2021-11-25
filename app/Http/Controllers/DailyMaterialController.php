@@ -19,7 +19,7 @@ class DailyMaterialController extends Controller
         if (auth()->user()->user_type == 3) {
             $daily_materials = DailyMaterial::with('stage')->where('school_id', auth()->user()->School->id)->where('class_id', auth()->user()->class_id);
         } else {
-            $daily_materials = DailyMaterial::with('stage')->where('school_id', auth()->user()->School->id);
+            $daily_materials = DailyMaterial::with('stage')->where('school_id', auth()->user()->School->id)->orderBy("ASC", "day");
         }
         if (isset($_GET)) {
             foreach ($_GET as $key => $value) {
