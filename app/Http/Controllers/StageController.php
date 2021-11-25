@@ -14,14 +14,20 @@ class StageController extends Controller
 
     public function getStages()
     {
+
+        if (auth()->user()->user_type == 2 || auth()->user()->user_type == 3 || auth()->user()->user_type == 1) {
+            $stages = Stage::with('semesters')->where("school_id", auth()->user()->school_id)->withCount('users');
+            if (!isset($_GET['skip']))
+                $_GET['skip'] = 0;
+            if (!isset($_GET['limit']))
+                $_GET['limit'] = 10;
+            $res = $this->paging($stages,  $_GET['skip'],  $_GET['limit']);
+            return $this->send_response(200, 'تم جلب المستخدمين بنجاح', [], $res["model"], null, $res["count"]);
+        }
         if (isset($_GET['class_id'])) {
             $stage = Stage::with('users', 'users.degrees')->find($_GET['class_id']);
             return $this->send_response(200, 'تم جلب معلومات الصف ', [], $stage);
         }
-        if (auth()->user()->user_type != 0) {
-            $stages = Stage::with('semesters')->where("school_id", auth()->user()->school_id)->withCount('users');
-        }
-
         $stages = Stage::with('semesters')->withCount('users');
         if (isset($_GET)) {
             foreach ($_GET as $key => $value) {
