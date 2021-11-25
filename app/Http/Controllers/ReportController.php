@@ -29,12 +29,12 @@ class ReportController extends Controller
             $user = User::find($report->user_id);
             broadcast(new AbsentSockets($report, $user, $notification_type));
 
-            if ($notification_type != "delete") {
+            if ($notification_type == "add") {
                 foreach ($user->firebaseTokens as $token) {
                     try {
                         $this->send_notification_firebase("تبليغ غياب", $report->body, $token->token);
                     } catch (Exception $th) {
-                        $token->delete();
+                        FirebaseToken::find($token->id)->delete();
                     }
                 }
             }
@@ -50,7 +50,7 @@ class ReportController extends Controller
                     try {
                         $this->send_notification_firebase("تبليغ عام", $report->body, $token->token);
                     } catch (Exception $th) {
-                        $token->delete();
+                        FirebaseToken::find($token->id)->delete();
                     }
                 }
             }
@@ -63,7 +63,7 @@ class ReportController extends Controller
                     try {
                         $this->send_notification_firebase("تبليغ خاص", $report->body, $token->token);
                     } catch (Exception $th) {
-                        $token->delete();
+                        FirebaseToken::find($token->id)->delete();
                     }
                 }
             }
@@ -78,7 +78,7 @@ class ReportController extends Controller
                     try {
                         $this->send_notification_firebase("تبليغ امتحان", $report->body, $token->token);
                     } catch (Exception $th) {
-                        $token->delete();
+                        FirebaseToken::find($token->id)->delete();
                     }
                 }
             }
@@ -93,7 +93,7 @@ class ReportController extends Controller
                     try {
                         $this->send_notification_firebase("تبليغ واجب", $report->body, $token->token);
                     } catch (Exception $th) {
-                        $token->delete();
+                        FirebaseToken::find($token->id)->delete();
                     }
                 }
             }
