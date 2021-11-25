@@ -15,6 +15,7 @@ use App\Events\ReportClassSockets;
 use App\Events\ReportGeneralSockets;
 use App\Models\FirebaseToken;
 use App\Traits\SendNotificationFirebase;
+use Exception;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 
@@ -28,7 +29,11 @@ class ReportController extends Controller
             $user = User::find($report->user_id);
             if ($notification_type != "delete") {
                 foreach ($user->firebaseTokens as $token) {
-                    $this->send_notification_firebase("تبليغ غياب", $report->body, $token->token);
+                    try {
+                        $this->send_notification_firebase("تبليغ غياب", $report->body, $token->token);
+                    } catch (Exception $th) {
+                        $token->delete();
+                    }
                 }
             }
             broadcast(new AbsentSockets($report, $user, $notification_type));
@@ -39,7 +44,11 @@ class ReportController extends Controller
             })->get();
             if ($notification_type != "delete") {
                 foreach ($tokens as $token) {
-                    $this->send_notification_firebase("تبليغ عام", $report->body, $token->token);
+                    try {
+                        $this->send_notification_firebase("تبليغ عام", $report->body, $token->token);
+                    } catch (Exception $th) {
+                        $token->delete();
+                    }
                 }
             }
             broadcast(new ReportGeneralSockets($report, $school_id, $notification_type));
@@ -47,7 +56,11 @@ class ReportController extends Controller
             $user = User::find($report->user_id);
             if ($notification_type != "delete") {
                 foreach ($user->firebaseTokens as $token) {
-                    $this->send_notification_firebase("تبليغ خاص", $report->body, $token->token);
+                    try {
+                        $this->send_notification_firebase("تبليغ خاص", $report->body, $token->token);
+                    } catch (Exception $th) {
+                        $token->delete();
+                    }
                 }
             }
             broadcast(new AbsentSockets($report, $user, $notification_type));
@@ -57,7 +70,11 @@ class ReportController extends Controller
             })->get();
             if ($notification_type != "delete") {
                 foreach ($tokens as $token) {
-                    $this->send_notification_firebase("تبليغ امتحان", $report->body, $token->token);
+                    try {
+                        $this->send_notification_firebase("تبليغ امتحان", $report->body, $token->token);
+                    } catch (Exception $th) {
+                        $token->delete();
+                    }
                 }
             }
             broadcast(new ReportClassSockets($report, $report->class_id, $notification_type));
@@ -67,7 +84,11 @@ class ReportController extends Controller
             })->get();
             if ($notification_type != "delete") {
                 foreach ($tokens as $token) {
-                    $this->send_notification_firebase("تبليغ واجب", $report->body, $token->token);
+                    try {
+                        $this->send_notification_firebase("تبليغ واجب", $report->body, $token->token);
+                    } catch (Exception $th) {
+                        $token->delete();
+                    }
                 }
             }
             broadcast(new ReportClassSockets($report, $report->class_id, $notification_type));
