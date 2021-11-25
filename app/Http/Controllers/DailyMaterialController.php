@@ -36,7 +36,7 @@ class DailyMaterialController extends Controller
             $_GET['skip'] = 0;
         if (!isset($_GET['limit']))
             $_GET['limit'] = 10;
-        $res = $this->paging($daily_materials->orderBy('day', 'ASC'),  $_GET['skip'],  $_GET['limit']);
+        $res = $this->paging($daily_materials->orderBy('day', 'DESC'),  $_GET['skip'],  $_GET['limit']);
         return $this->send_response(200, 'تم جلب جدول الدروس بنجاح', [], $res["model"], null, $res["count"]);
     }
 
