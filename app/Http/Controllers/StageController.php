@@ -19,7 +19,7 @@ class StageController extends Controller
             return $this->send_response(200, 'تم جلب معلومات الصف ', [], $stage);
         }
         if (auth()->user()->user_type != 0) {
-            $stages = Stage::with('semesters')->where("school_id", auth()->user()->id)->withCount('users');
+            $stages = Stage::with('semesters')->where("school_id", auth()->user()->school_id)->withCount('users');
         }
 
         $stages = Stage::with('semesters')->withCount('users');
