@@ -18,6 +18,10 @@ class StageController extends Controller
             $stage = Stage::with('users', 'users.degrees')->find($_GET['class_id']);
             return $this->send_response(200, 'تم جلب معلومات الصف ', [], $stage);
         }
+        if (auth()->user()->user_type != 0) {
+            $stages = Stage::with('semesters')->where("school_id", auth()->user()->id)->withCount('users');
+        }
+
         $stages = Stage::with('semesters')->withCount('users');
         if (isset($_GET)) {
             foreach ($_GET as $key => $value) {
