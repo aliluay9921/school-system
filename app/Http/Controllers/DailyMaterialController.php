@@ -19,7 +19,7 @@ class DailyMaterialController extends Controller
         if (auth()->user()->user_type == 3) {
             $daily_materials = DailyMaterial::with('stage')->where('school_id', auth()->user()->School->id)->where('class_id', auth()->user()->class_id);
         } else {
-            $daily_materials = DailyMaterial::with('stage')->where('school_id', auth()->user()->School->id)->orderBy("ASC", "day");
+            $daily_materials = DailyMaterial::with('stage')->where('school_id', auth()->user()->School->id);
         }
         if (isset($_GET)) {
             foreach ($_GET as $key => $value) {
@@ -35,7 +35,7 @@ class DailyMaterialController extends Controller
             $_GET['skip'] = 0;
         if (!isset($_GET['limit']))
             $_GET['limit'] = 10;
-        $res = $this->paging($daily_materials,  $_GET['skip'],  $_GET['limit']);
+        $res = $this->paging($daily_materials->orderBy("ASC", "day"),  $_GET['skip'],  $_GET['limit']);
         return $this->send_response(200, 'تم جلب جدول الدروس بنجاح', [], $res["model"], null, $res["count"]);
     }
 
