@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Payment;
 use App\Traits\Pagination;
 use App\Models\Notification;
+use App\Traits\SendNotificationFirebase;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Validator;
 
 class PaymentsController extends Controller
 {
-    use SendResponse, Pagination;
+    use SendResponse, Pagination, SendNotificationFirebase;
 
     public function getPayments()
     {
@@ -86,6 +87,9 @@ class PaymentsController extends Controller
                 'from'  => auth()->user()->id,
                 'type'  => 0
             ]);
+            foreach ($user->firebaseTokens as $token) {
+                $this->send_notification_firebase('تم استلام مبلغ القسط', $notification->body, $token->token);
+            }
         } else {
             $notification = Notification::create([
                 'title' => 'تبليغ استلام راتب',
@@ -93,6 +97,9 @@ class PaymentsController extends Controller
                 'from'  => auth()->user()->id,
                 'type'  => 0
             ]);
+            foreach ($user->firebaseTokens as $token) {
+                $this->send_notification_firebase('تبليغ استلام راتب', $notification->body, $token->token);
+            }
         }
         $notification->users()->attach($user);
         return $this->send_response(200, 'تم اضافة دفع  بنجاح', [], Payment::with('user')->find($payment->id));

@@ -43,7 +43,7 @@ class StageController extends Controller
         if (!isset($_GET['limit']))
             $_GET['limit'] = 10;
         $res = $this->paging($stages,  $_GET['skip'],  $_GET['limit']);
-        return $this->send_response(200, 'تم جلب المستخدمين بنجاح', [], $res["model"], null, $res["count"]);
+        return $this->send_response(200, 'تم جلب الصفوف بنجاح', [], $res["model"], null, $res["count"]);
     }
 
     public function addStage(Request $request)

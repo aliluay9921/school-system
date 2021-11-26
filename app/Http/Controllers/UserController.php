@@ -147,7 +147,7 @@ class UserController extends Controller
     {
         $request = $request->json()->all();
         $get = InfoUser::where('user_id', $request['user_id'])->get();
-        return $this->send_response(200, 'تم نجاح العملية', [], $get);
+        return $this->send_response(200, 'عرض كلمة المرور بنجاح', [], $get);
     }
 
     public function staticstics()

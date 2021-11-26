@@ -42,7 +42,7 @@ class FeedbackController extends Controller
         if (!isset($_GET['limit']))
             $_GET['limit'] = 10;
         $res = $this->paging($feedbacks,  $_GET['skip'],  $_GET['limit']);
-        return $this->send_response(200, 'تم جلب ردود بنجاح', [], $res["model"], null, $res["count"]);
+        return $this->send_response(200, 'تم جلب مشاركات اولياء الامور بنجاح', [], $res["model"], null, $res["count"]);
     }
 
 

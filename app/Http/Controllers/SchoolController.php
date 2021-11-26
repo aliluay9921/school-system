@@ -20,7 +20,7 @@ class SchoolController extends Controller
         if (!isset($_GET['limit']))
             $_GET['limit'] = 10;
         $res = $this->paging($schools,  $_GET['skip'],  $_GET['limit']);
-        return $this->send_response(200, 'تم جلب الدروس بنجاح', [], $res["model"], null, $res["count"]);
+        return $this->send_response(200, 'تم جلب المدارس بنجاح', [], $res["model"], null, $res["count"]);
     }
     public function add_school(Request $request)
     {

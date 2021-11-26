@@ -56,7 +56,7 @@ class MaterialStageTeacherController extends Controller
         if (!isset($_GET['limit']))
             $_GET['limit'] = 10;
         $res = $this->paging($get,  $_GET['skip'],  $_GET['limit']);
-        return $this->send_response(200, 'تم جلب معلومات بنجاح', [], $res["model"], null, $res["count"]);
+        return $this->send_response(200, 'تم جلب توزيع الدروس  بنجاح', [], $res["model"], null, $res["count"]);
     }
 
     public function addMaterialStageTeacher(Request $request)
