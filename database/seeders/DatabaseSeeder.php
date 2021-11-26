@@ -15,18 +15,18 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
-        $this->call(SchoolSeeder::class);
-        $this->call(MaterialSeeder::class);
-        $this->call(StageSeeder::class);
+        // $this->call(SchoolSeeder::class);
+        // $this->call(MaterialSeeder::class);
+        // $this->call(StageSeeder::class);
         $this->call(UserSeeder::class);
 
-        $this->call(DailyMaterialSeeder::class);
-        $this->call(PaymentSeeder::class);
-        $this->call(SemesterSeeder::class);
-        $this->call(FeedbackSeeder::class);
-        $this->call(SemesterSeeder::class);
-        $this->call(ExamSeeder::class);
+        // $this->call(DailyMaterialSeeder::class);
+        // $this->call(PaymentSeeder::class);
+        // $this->call(SemesterSeeder::class);
+        // $this->call(FeedbackSeeder::class);
+        // $this->call(SemesterSeeder::class);
+        // $this->call(ExamSeeder::class);
 
-        $this->call(MaterialStageTeacherSeeder::class);
+        // $this->call(MaterialStageTeacherSeeder::class);
     }
 }
