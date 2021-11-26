@@ -90,7 +90,7 @@ class PaymentsController extends Controller
                 'type'  => 0
             ]);
             foreach ($user->firebaseTokens as $token) {
-                $this->send_notification_firebase('تم استلام مبلغ القسط', $notification->body, $token->token);
+
                 try {
                     $this->send_notification_firebase('تم استلام مبلغ القسط', $notification->body, $token->token);
                 } catch (Exception $th) {
