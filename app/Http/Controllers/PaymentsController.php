@@ -69,6 +69,12 @@ class PaymentsController extends Controller
         if ($validator->fails()) {
             return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
         }
+        $user = User::find($request['user_id']);
+        if ($user->user_type == 2) {
+            if ($user->salary < $request["value"]) {
+                return $this->send_response("401", "لايمكنك اضافة قيمة اكبر من قيمة الراتب لهذا المدرس", [], []);
+            }
+        }
         $payment = Payment::create([
             'school_id' => auth()->user()->school->id,
             'pay_date' => $request['pay_date'],
@@ -76,7 +82,6 @@ class PaymentsController extends Controller
             'user_id' => $request['user_id'],
         ]);
 
-        $user = User::find($request['user_id']);
         if ($user->user_type == 3) {
             if ($user->stage->fee == $user->payments->sum('value')) {
                 $user->update([
