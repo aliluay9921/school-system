@@ -13,9 +13,7 @@ class SchoolController extends Controller
 
     public function getSchool()
     {
-        $schools = School::whereHas("users", function ($q) {
-            $q->where("user_type", 3);
-        })->withCount("users");
+        $schools = School::select('*');
 
         if (!isset($_GET['skip']))
             $_GET['skip'] = 0;
