@@ -41,7 +41,7 @@ class AuthController extends Controller
         }
     }
 
-    public function authInfo(Request $request)
+    public function authInfo()
     {
         return $this->send_response(200, 'تم جلب معلومات المستخدم', [], User::with('school', 'stage', 'materials_stages_teachers', 'payments')->find(auth()->user()->id));
     }

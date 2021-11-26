@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\User;
 use App\Models\Payment;
 use App\Traits\Pagination;
 use App\Models\Notification;
-use App\Traits\SendNotificationFirebase;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
+use App\Models\FirebaseToken;
 use Illuminate\Support\Facades\Schema;
+use App\Traits\SendNotificationFirebase;
 use Illuminate\Support\Facades\Validator;
 
 class PaymentsController extends Controller
@@ -89,6 +91,11 @@ class PaymentsController extends Controller
             ]);
             foreach ($user->firebaseTokens as $token) {
                 $this->send_notification_firebase('تم استلام مبلغ القسط', $notification->body, $token->token);
+                try {
+                    $this->send_notification_firebase('تم استلام مبلغ القسط', $notification->body, $token->token);
+                } catch (Exception $th) {
+                    FirebaseToken::find($token->id)->delete();
+                }
             }
         } else {
             $notification = Notification::create([
@@ -98,7 +105,11 @@ class PaymentsController extends Controller
                 'type'  => 0
             ]);
             foreach ($user->firebaseTokens as $token) {
-                $this->send_notification_firebase('تبليغ استلام راتب', $notification->body, $token->token);
+                try {
+                    $this->send_notification_firebase('تبليغ استلام راتب', $notification->body, $token->token);
+                } catch (Exception $th) {
+                    FirebaseToken::find($token->id)->delete();
+                }
             }
         }
         $notification->users()->attach($user);
