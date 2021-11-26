@@ -6,6 +6,7 @@ use App\Traits\Pagination;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
 use App\Models\Material_stage_teacher;
+use Database\Seeders\MaterialStageTeacherSeeder;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 
@@ -76,6 +77,10 @@ class MaterialStageTeacherController extends Controller
         ]);
         if ($validator->fails()) {
             return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
+        }
+        $smt = Material_stage_teacher::where("school_id", auth()->user()->school->id)->where("class_id", $request["class_id"])->where("teacher_id", $request["teacher_id"])->where("material_id", $request["material_id"])->get();
+        if ($smt) {
+            return $this->send_response("401", "لقد قمت بأضافة هذه المادة لهذا المدرس في هذاالصف", [], []);
         }
         $add = Material_stage_teacher::create([
             'class_id' => $request['class_id'],
