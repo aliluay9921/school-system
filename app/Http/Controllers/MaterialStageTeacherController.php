@@ -79,7 +79,8 @@ class MaterialStageTeacherController extends Controller
             return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
         }
         $smt = Material_stage_teacher::where("school_id", auth()->user()->school->id)->where("class_id", $request["class_id"])->where("teacher_id", $request["teacher_id"])->where("material_id", $request["material_id"])->get();
-        if ($smt) {
+        // return $smt;
+        if ($smt->count() > 0) {
             return $this->send_response("401", "لقد قمت بأضافة هذه المادة لهذا المدرس في هذاالصف", [], []);
         }
         $add = Material_stage_teacher::create([
