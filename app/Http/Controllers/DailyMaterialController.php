@@ -8,6 +8,7 @@ use App\Models\Notification;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
 use App\Models\DailyMaterial;
+use App\Models\Stage;
 use Illuminate\Support\Facades\Validator;
 
 class DailyMaterialController extends Controller
@@ -56,6 +57,11 @@ class DailyMaterialController extends Controller
         ]);
         if ($validator->fails()) {
             return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
+        }
+        $cheak = DailyMaterial::where("school_id", auth()->user()->school->id)->where("class_id", $request["class_id"])->where("day", $request["day"])->get();
+        // return $cheak;
+        if ($cheak->count() > 0) {
+            return $this->send_response("401", "عذراً لايمكنك اضافة جدولين ليوم واحد", [], []);
         }
         // return $request['materials'];
         $daily_materials = DailyMaterial::create([
