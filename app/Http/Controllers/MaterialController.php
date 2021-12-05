@@ -46,7 +46,7 @@ class MaterialController extends Controller
             $_GET['skip'] = 0;
         if (!isset($_GET['limit']))
             $_GET['limit'] = 10;
-        $res = $this->paging($materials,  $_GET['skip'],  $_GET['limit']);
+        $res = $this->paging($materials->orderBy("created_at", "DESC"),  $_GET['skip'],  $_GET['limit']);
         return $this->send_response(200, 'تم جلب المواد بنجاح', [], $res["model"], null, $res["count"]);
     }
 

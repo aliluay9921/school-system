@@ -45,7 +45,7 @@ class DegreeController extends Controller
             $_GET['skip'] = 0;
         if (!isset($_GET['limit']))
             $_GET['limit'] = 90;
-        $res = $this->paging($degrees,  $_GET['skip'],  $_GET['limit']);
+        $res = $this->paging($degrees->orderBy("created_at", "DESC"),  $_GET['skip'],  $_GET['limit']);
         return $this->send_response(200, 'تم جلب الدرجات بنجاح', [], $res["model"], null, $res["count"]);
     }
 
