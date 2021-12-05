@@ -20,9 +20,7 @@ class PaymentsController extends Controller
 
     public function getPayments()
     {
-        $payments = Payment::with('user', function ($q) {
-            $q->withTrashed();
-        })->where('school_id', auth()->user()->School->id);
+        $payments = Payment::with('user')->where('school_id', auth()->user()->School->id);
         if (isset($_GET['user_type'])) {
             $payments->whereHas('user', function ($q) {
                 $q->where('user_type', $_GET['user_type']);
