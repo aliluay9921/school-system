@@ -14,7 +14,7 @@ class Material_stage_teacher extends Model
     protected $with = ['stage', 'material', 'user'];
     public function user()
     {
-        return $this->belongsTo(User::class, 'teacher_id');
+        return $this->belongsTo(User::class, 'teacher_id')->withTrashed();
     }
     public function stage()
     {
