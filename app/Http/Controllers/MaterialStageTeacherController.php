@@ -56,7 +56,7 @@ class MaterialStageTeacherController extends Controller
             $_GET['skip'] = 0;
         if (!isset($_GET['limit']))
             $_GET['limit'] = 10;
-        $res = $this->paging($get,  $_GET['skip'],  $_GET['limit']);
+        $res = $this->paging($get->orderBy("created_at", "DESC"),  $_GET['skip'],  $_GET['limit']);
         return $this->send_response(200, 'تم جلب توزيع الدروس  بنجاح', [], $res["model"], null, $res["count"]);
     }
 
