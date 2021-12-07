@@ -62,7 +62,6 @@ class SemesterController extends Controller
             'name.required' => 'يجب ادخال اسم الفصل ',
             'max_degree.required' => 'يجب ادخال معدل الدرجات  ',
             'class_id.required' => 'يجب ادخال  الصف  ',
-            'name.unique' => 'اسم الفصل مستخدم سابقاً',
         ]);
         if ($validator->fails()) {
             return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
