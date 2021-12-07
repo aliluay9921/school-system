@@ -48,14 +48,14 @@ class SemesterController extends Controller
             $_GET['skip'] = 0;
         if (!isset($_GET['limit']))
             $_GET['limit'] = 10;
-        $res = $this->paging($semester,  $_GET['skip'],  $_GET['limit']);
+        $res = $this->paging($semester->orderBy("created_at", "DESC"),  $_GET['skip'],  $_GET['limit']);
         return $this->send_response(200, 'تم جلب المستخدمين بنجاح', [], $res["model"], null, $res["count"]);
     }
     public function addSemester(Request $request)
     {
         $request = $request->json()->all();
         $validator = Validator::make($request, [
-            'name' => 'required|unique:semesters,name',
+            'name' => 'required',
             'max_degree' => 'required',
             'class_id' => 'required',
         ], [
@@ -66,6 +66,11 @@ class SemesterController extends Controller
         ]);
         if ($validator->fails()) {
             return $this->send_response(401, 'خطأ بالمدخلات', $validator->errors(), []);
+        }
+        $cheak = Semester::where("school_id", auth()->user()->school->id)->where("class_id", $request["class_id"])->where("name", $request["name"])->get();
+        // return $cheak;
+        if ($cheak->count() > 0) {
+            return $this->send_response("401", "عذراًالفصل الدراسي الذي قمت بأضافته موجود سابقاً", [], []);
         }
 
         $semester = Semester::create([
