@@ -260,6 +260,7 @@ class ReportController extends Controller
         if ($request['type'] == 0) {
             $report->update([
                 "body" => $request['body'],
+                "link" => $request['link'],
             ]);
             $this->send_notification(Report::find($request['report_id']), "edit");
             return $this->send_response(200, 'تم التعديل على التبليغ', [], []);
