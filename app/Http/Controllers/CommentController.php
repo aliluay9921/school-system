@@ -16,11 +16,12 @@ use App\Events\CommentSocket;
 use App\Events\AuthNotification;
 use Illuminate\Support\Facades\Schema;
 use App\Traits\SendNotificationFirebase;
+use App\Traits\UploadImage;
 use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
 {
-    use SendResponse, Pagination, SendNotificationFirebase;
+    use SendResponse, Pagination, SendNotificationFirebase, UploadImage;
 
     public function getCommtns()
     {
