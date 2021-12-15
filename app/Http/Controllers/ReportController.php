@@ -226,6 +226,9 @@ class ReportController extends Controller
         if (array_key_exists('from_time', $request)) {
             $data['from_time'] = $request['from_time'];
         }
+        if (array_key_exists('link', $request)) {
+            $data['link'] = $request['link'];
+        }
         $new_report = Report::create($data);
         if (array_key_exists('images', $request)) {
             foreach ($request['images'] as $image) {

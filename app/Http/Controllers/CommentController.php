@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Image;
 use App\Models\Report;
 use App\Models\Comment;
 use App\Traits\Pagination;
 use App\Models\Notification;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
-use App\Events\AuthNotification;
 use App\Events\CommentSocket;
-use App\Traits\SendNotificationFirebase;
+use App\Events\AuthNotification;
 use Illuminate\Support\Facades\Schema;
+use App\Traits\SendNotificationFirebase;
 use Illuminate\Support\Facades\Validator;
-use Exception;
 
 class CommentController extends Controller
 {
@@ -87,6 +88,7 @@ class CommentController extends Controller
             'report_id' => $request['report_id']
         ];
 
+
         if (array_key_exists('parent_id', $request)) {
             $re_comment = Comment::find($request['parent_id']);
             $user = User::find($re_comment->user_id);
@@ -134,7 +136,15 @@ class CommentController extends Controller
                 }
             }
         }
-
+        if (array_key_exists('images', $request)) {
+            foreach ($request['images'] as $image) {
+                Image::create([
+                    'image' => $this->uploadPicture($image, '/images/'),
+                    'comment_id' => $comment->id,
+                    'school_id' => auth()->user()->School->id
+                ]);
+            }
+        }
         broadcast(new CommentSocket($comment, $report, "add"));
 
 
