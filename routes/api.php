@@ -37,7 +37,6 @@ Route::middleware(['cors'])->group(function () {
 
 
     route::post('login', [AuthController::class, 'login']);
-
     route::get("send_firebase", [NotificationController::class, "sendFirebase"]);
     route::get("test", function () {
 
