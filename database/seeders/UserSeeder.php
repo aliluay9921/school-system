@@ -16,12 +16,11 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-
         $school = School::first();
         $stage = Stage::first();
         User::create([
             'full_name' => 'علي لؤي',
-            'user_name' => 'ali_luay',
+            'user_name' => 'micodev',
             'password' => bcrypt('11111111'),
             'gender' => 0,
             'user_type' => 0,
